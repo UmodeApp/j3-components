@@ -1,0 +1,32 @@
+Style/FrozenStringLiteralComment:
+  EnforcedStyle: never
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+Metrics/LineLength:
+  Max: 300
+Style/ConditionalAssignment:
+  EnforcedStyle: assign_to_condition
+Metrics/MethodLength:
+  Max: 20
+Metrics/AbcSize:
+  Max: 20
+Style/Documentation:
+  Exclude:
+    - 'spec/**/*'
+    - 'test/**/*'
+    - 'db/migrate/*'
+    - 'app/migrate/*'
+    - 'app/controllers/**/*'
+    - 'app/datatables/**/*'
+    - 'app/forms/**/*'
+    - 'app/helpers/**/*'
+    - 'app/queries/**/*'
+Style/DocumentationMethod:
+  Enabled: true
+  Exclude:
+    - 'spec/**/*'
+    - 'test/**/*'
+    - 'db/migrate/*'
+    - 'app/migrate/*'
+    - 'app/controllers/**/*'
+    - 'app/datatables/**/*'

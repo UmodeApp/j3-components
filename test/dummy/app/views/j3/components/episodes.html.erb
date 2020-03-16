@@ -1,0 +1,6 @@
+<div class="records">
+  <% @episodes.each do |episode| %>
+    <div class="dropdown-item" data-id="<%= episode[0] %>"><%= episode[1] %></div>
+  <% end %>
+</div>
+

@@ -1,0 +1,39 @@
+{
+  "name": "@j3/components",
+  "version": "0.1.0",
+  "description": "J3 Components Javascrtipt Interface",
+  "main": "lib/assets/compiled/j3_components.js",
+  "files": [
+    "lib/assets/compiled/*.js"
+  ],
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "build": "bundle exec blade build",
+    "test": "echo \"See the README: https://github.com/rails/rails/blob/master/actionview/app/assets/javascripts#how-to-run-tests\" && exit 1",
+    "lint": "coffeelint app/assets/javascripts && eslint test/ujs/public/test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "rails/rails"
+  },
+  "contributors": [
+    "Stephen St. Martin",
+    "Steve Schwartz",
+    "Dangyi Liu",
+    "All contributors"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rails/rails/issues"
+  },
+  "homepage": "http://rubyonrails.org/",
+  "devDependencies": {
+    "coffeelint": "^2.1.0",
+    "eslint": "^2.13.1"
+  },
+  "dependencies": {
+    "blade": "^3.3.1"
+  }
+}

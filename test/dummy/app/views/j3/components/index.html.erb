@@ -1,0 +1,16 @@
+<%= form_with @form_object do |f| %>
+  <p>Data</p>
+  <div class="form-group">
+    <%= f.j3_autocomplete :episode_ajax_and_search, 'data-datalist': '#episode1_data' %>
+    <datalist id="episode1_data">
+      <% @episodes.each do |episode| %>
+      <option value="<%= episode[0] %>"><%= episode[1] %></option>
+      <% end %>
+    </datalist>
+  </div>
+
+  <p>AJAX Call and Search</p>
+  <div class="form-group">
+    <%= f.j3_autocomplete :episode_ajax_and_search, 'data-url': episodes_path %>
+  </div>
+<% end %>
