@@ -12,6 +12,7 @@ $.fn.j3_autocomplete = function() {
     dropdown.j3_autocomplete_dropdown = new J3AutocompleteDropdown(dropdown)
     dropdown.j3_autocomplete_dropdown.init(dropdown)
   }
+  return dropdown
 }
 
 /**
@@ -27,7 +28,7 @@ class J3AutocompleteDropdown {
 J3AutocompleteDropdown.prototype.init = (dropdown) => {
   if (dropdown.j3_autocomplete_dropdown.isEnabled(dropdown)) {
     dropdown.removeClass('d-none')
-    // dropdown.j3_autocomplete_dropdown.clear(dropdown)
+    dropdown.j3_autocomplete_dropdown.clear(dropdown)
     if (dropdown.j3_autocomplete_dropdown.val() != '') {
       // if has value, load data and set value
       dropdown.j3_autocomplete_dropdown.bindShowEvent(dropdown)
@@ -169,7 +170,11 @@ J3AutocompleteDropdown.prototype.bindDropDownItemEvent = (dropdown, event) => {
 J3AutocompleteDropdown.prototype.checkRelatives = (dropdown) => {
   let inputId = dropdown.find('.j3_autocomplete__input').prop('id')
   // show all j3_autocomplete with this as relative
-  $(`.j3_autocomplete[data-relative="#${inputId}"]`).j3_autocomplete()
+  let relative = $(`.j3_autocomplete[data-relative="#${inputId}"]`)
+  if (relative.length > 0) {
+    relative = relative.j3_autocomplete()
+    relative.j3_autocomplete_dropdown.clear(relative)
+  }
 }
 
 J3AutocompleteDropdown.prototype.clear = (dropdown) => {
