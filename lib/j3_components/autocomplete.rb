@@ -25,10 +25,10 @@ module J3Components::Autocomplete
     tag.input(type: :text, class: :j3_autocomplete__search, placeholder: I18n.t('j3.autocomplete.search_placeholder')) + tag.div(class: 'dropdown-divider')
   end
 
-  def j3_autocomplete__input(field, options)
-    hidden_field(field, class: 'j3_autocomplete__input') + tag.a(href: '#', 'data-toggle': :dropdown, 'aria-haspopup': true, 'aria-expanded': false) do
+  def j3_autocomplete__input(field, options = {})
+    hidden_field(field, class: 'j3_autocomplete__input', value: options.delete(:value)) + tag.a(href: '#', 'data-toggle': :dropdown, 'aria-haspopup': true, 'aria-expanded': false) do
       tag.div(class: options.delete(:input_class)) do
-        [label(field), tag.div(class: 'j3_autocomplete__input')].join.html_safe
+        [label(field), tag.div(class: 'j3_autocomplete__label')].join.html_safe
       end
     end
   end

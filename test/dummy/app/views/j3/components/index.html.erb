@@ -1,16 +1,36 @@
 <%= form_with @form_object do |f| %>
   <p>Data</p>
-  <div class="form-group">
+  <%
+=begin%>
+ <div class="form-group">
     <%= f.j3_autocomplete :episode_ajax_and_search, 'data-datalist': '#episode1_data' %>
     <datalist id="episode1_data">
       <% @episodes.each do |episode| %>
       <option value="<%= episode[0] %>"><%= episode[1] %></option>
       <% end %>
     </datalist>
-  </div>
+  </div> 
+<%
+=end%>
+
+  <%
+=begin%>
+ <p>With Value</p>
+  <div class="form-group">
+    <%= f.j3_autocomplete :episode_with_value, 'data-url': episodes_path, value: '2' %>
+  </div> 
+<%
+=end%>
 
   <p>AJAX Call and Search</p>
   <div class="form-group">
     <%= f.j3_autocomplete :episode_ajax_and_search, 'data-url': episodes_path %>
   </div>
+
+  <p>Relative</p>
+  <div class="form-group">
+    <%= f.j3_autocomplete :episode_relatives, 'data-url': heroes_path, 'data-relative': '#episode_ajax_and_search', 'data-chained-relative': true %>
+  </div>
+
+
 <% end %>

@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'blade'
   spec.add_development_dependency 'bootstrap', '~> 4.4.1'
+  spec.add_development_dependency 'byebug' #, platforms: [:mri, :mingw, :x64_mingw]
   spec.add_development_dependency 'capybara', '>= 2.15'
   spec.add_development_dependency 'chromedriver-helper'
   spec.add_development_dependency 'jquery-rails'

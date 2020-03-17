@@ -1,0 +1,6 @@
+<div class="records">
+  <% @heroes.each do |hero| %>
+    <div class="dropdown-item" data-id="<%= hero[0] %>"><%= hero[1] %></div>
+  <% end %>
+</div>
+
