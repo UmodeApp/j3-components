@@ -1,4 +1,5 @@
 @import "bootstrap"
+@import "j3_components"
 
 // Example CSS
 .container
@@ -8,43 +9,3 @@
     color: blue
     font-weight: bold
 
-.j3_autocomplete
-  a[data-toggle="dropdown"]
-    text-decoration: none
-    color: black
-    &:hover
-      color: black
-  label
-    font-size: 0.7rem
-    position: absolute
-    left: 8px
-    top: 4px
-    padding: 0 4px
-  .j3_autocomplete__label
-    background-color: #EAEAEA
-    border-top-left-radius: 4px
-    border-top-right-radius: 4px
-    border-bottom: 2px solid #CCC
-    height: 54px
-    display: flex
-    align-items: center
-    padding: 12px
-    padding-top: 20px
-  .dropdown-menu
-    width: 100%
-    margin-top: -57px
-    border-radius: 0
-    border: 0
-    border-top: 1px solid blue
-    box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12)
-    border-top: 2px solid $primary
-    .records
-      max-height: 40vh
-      overflow-y: auto
-      .dropdown-item
-        cursor: pointer
-  .j3_autocomplete__search
-    border: 0
-    width: 100%
-    padding: 0.25rem 1.25rem
-    outline: none

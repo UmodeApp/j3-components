@@ -1,11 +1,14 @@
 load_paths:
   - app/assets/javascripts
+  - app/assets/stylesheets
 
 logical_paths:
   - j3_components.js
+  - j3_components.css
 
 build:
   logical_paths:
     - j3_components.js
+    - j3_components.css
   path: lib/assets/compiled
   clean: true

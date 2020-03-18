@@ -8,6 +8,12 @@ module J3Components
     #   j3_autocomplete(:episode, input_class: 'mdc-text-field')
     #   # => 
     #
+    # === Options
+    #  * data-url: URL for dropdown items ajax request
+    #  * data-datalist: Use a datalist for dropdown items or initial options 
+    #    when data-url is defined.
+    #  * input_container_class: Class for input container for input (dropdown) and label
+    #
     #   j3_autocomplete(:episode, input_class: 'mdc-text-field')
     def j3_autocomplete(field, options = {})
       tag.div({ class: 'dropdown j3_autocomplete' }.merge(options)) do
@@ -18,19 +24,20 @@ module J3Components
     private
 
     def j3_autocomplete__menu
-      tag.div(j3_autocomplete__search_tag + tag.div(class: 'autocomplete-results'), class: 'dropdown-menu')
+      tag.div(j3_autocomplete__search_tag + tag.div(class: 'autocomplete-results'), class: 'dropdown-menu w-100')
     end
 
     # Render a search input for autocomplete
     def j3_autocomplete__search_tag
-      tag.input(type: :text, class: :j3_autocomplete__search, placeholder: I18n.t('j3.autocomplete.search_placeholder')) + tag.div(class: 'dropdown-divider')
+      tag.input(type: :text, class: 'j3_autocomplete__search w-100', placeholder: I18n.t('j3.autocomplete.search_placeholder')) + tag.div(class: 'dropdown-divider')
     end
 
     def j3_autocomplete__input(field, options = {})
-      hidden_field(field, class: 'j3_autocomplete__input', value: options.delete(:value)) + tag.a(href: '#', 'data-toggle': :dropdown, 'aria-haspopup': true, 'aria-expanded': false) do
-        tag.div(class: options.delete(:input_class)) do
-          [label(field), tag.div(class: 'j3_autocomplete__label')].join.html_safe
-        end
+      tag.a(href: '#', 'data-toggle': :dropdown, 'aria-haspopup': true, 'aria-expanded': false, class: options.delete(:input_container_class)) do
+        html = [hidden_field(field, class: 'j3_autocomplete__input', value: options.delete(:value))]
+        html << label(field, class: options.delete(:label_class))
+        html << tag.div(class: "j3_autocomplete__label #{options.delete(:input_class)}")
+        html.join.html_safe
       end
     end
   end
