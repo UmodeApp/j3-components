@@ -40,7 +40,9 @@ module J3Components
 
     def j3_autocomplete__input(field, options = {})
       tag.a(href: '#', 'data-toggle': :dropdown, 'aria-haspopup': true, 'aria-expanded': false, class: options.delete(:input_container_class)) do
-        html = [hidden_field(field, class: 'j3_autocomplete__input', value: options.delete(:value))]
+        html = []
+        hidden_class = 'j3_autocomplete__input'
+        html << options[:value].present? ? hidden_field(field, class: hidden_class, value: options.delete(:value)) : hidden_field(field, class: hidden_class)
         html << label(field, class: options.delete(:label_class))
         html << tag.div(class: "j3_autocomplete__label #{options.delete(:input_class)}")
         html.join.html_safe
