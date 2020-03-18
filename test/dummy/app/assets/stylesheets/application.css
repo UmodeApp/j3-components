@@ -1,0 +1,13 @@
+/*
+ *= require_self
+ *= require j3_components
+ */
+
+.container {
+  padding: 24px;
+}
+p {
+  color: blue;
+  font-weight: bold;
+}
+

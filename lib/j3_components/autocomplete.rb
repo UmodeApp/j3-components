@@ -1,23 +1,29 @@
 # = Autocomplete Helpers
 module J3Components
   module Autocomplete
+    # Autocomplete with mdc classes
+    def j3_mdc_autocomplete(field, options)
+      j3_autocomplete(field, { input_container_class: 'mdc-text-field w-100', input_class: 'mdc-text-field__input w-100', label_class: 'mdc-floating-label' }.merge(options))
+    end
     ##
     # Render j3 autocomplete component
     #
     # ==== Examples
     #   j3_autocomplete(:episode, input_class: 'mdc-text-field')
-    #   # => 
     #
     # === Options
     #  * data-url: URL for dropdown items ajax request
     #  * data-datalist: Use a datalist for dropdown items or initial options 
     #    when data-url is defined.
-    #  * input_container_class: Class for input container for input (dropdown) and label
+    #  * input_container_class: Class for input container for input (dropdown) 
+    #    and label
+    #  * label_class: Class for custom label
     #
     #   j3_autocomplete(:episode, input_class: 'mdc-text-field')
     def j3_autocomplete(field, options = {})
+      input_and_menu = j3_autocomplete__input(field, options) + j3_autocomplete__menu
       tag.div({ class: 'dropdown j3_autocomplete' }.merge(options)) do
-        j3_autocomplete__input(field, options) + j3_autocomplete__menu
+        input_and_menu
       end
     end
 
