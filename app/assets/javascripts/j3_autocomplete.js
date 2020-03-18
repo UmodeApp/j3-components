@@ -163,7 +163,7 @@ class J3AutocompleteDropdown {
       dropdown.j3_autocomplete_dropdown.selected(dropdown, target.html())
 
       // trigger change event
-      dropdown.trigger('j3_autocomplete:change', [dropdown])
+      dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:change', [dropdown])
     }
 
     // Show all relatives autocompletes
