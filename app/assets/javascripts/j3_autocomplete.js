@@ -26,10 +26,9 @@ class J3AutocompleteDropdown {
     this.init = (dropdown) => {
       if (dropdown.j3_autocomplete_dropdown.isEnabled(dropdown)) {
         dropdown.removeClass('d-none')
-        dropdown.j3_autocomplete_dropdown.clear(dropdown)
         if (dropdown.j3_autocomplete_dropdown.val() != '') {
           // if has value, load data and set value
-          dropdown.j3_autocomplete_dropdown.bindShowEvent(dropdown)
+          dropdown.j3_autocomplete_dropdown.bindShowEvent(dropdown, false)
         } else {
           // bind event on dropdown show
           dropdown.off('show.bs.dropdown').on('show.bs.dropdown', () => dropdown.j3_autocomplete_dropdown.bindShowEvent(dropdown))
@@ -41,13 +40,13 @@ class J3AutocompleteDropdown {
     }
 
     // Init dropdown events and load results
-    this.bindShowEvent = (dropdown) => {
+    this.bindShowEvent = (dropdown, clear = true) => {
       // Puts progress
       let autocompleteResults = dropdown.find('.dropdown-menu .autocomplete-results')
       autocompleteResults.j3_progress()
 
       // Call URL
-      dropdown.j3_autocomplete_dropdown.getResults(autocompleteResults, dropdown)
+      dropdown.j3_autocomplete_dropdown.getResults(autocompleteResults, dropdown, clear)
       dropdown.off('show.bs.dropdown')
     }
 
@@ -76,9 +75,9 @@ class J3AutocompleteDropdown {
     }
 
     // Call URL and fill autocompleteResults container
-    this.getResults = (autocompleteResults, dropdown) => {
+    this.getResults = (autocompleteResults, dropdown, clear = true) => {
       if (dropdown.data('url')) {
-        dropdown.j3_autocomplete_dropdown.clear(dropdown)
+        if (clear) dropdown.j3_autocomplete_dropdown.clear(dropdown)
         let url = dropdown.j3_autocomplete_dropdown.url(dropdown)
         let value = dropdown.j3_autocomplete_dropdown.val()
         $.get(url, (response) => {
@@ -142,6 +141,8 @@ class J3AutocompleteDropdown {
     this.selected = (dropdown, html) => {
       // set html to input
       dropdown.find('.j3_autocomplete__label').html(html)
+      // float mdc label
+      dropdown.find('.mdc-floating-label').addClass('mdc-floating-label--float-above')
       // add selected class to dropdown to extend css capabilities
       dropdown.addClass('selected')
       // check relatives
@@ -151,9 +152,6 @@ class J3AutocompleteDropdown {
     // Bind click event for dropdown items
     this.bindDropDownItemEvent = (dropdown, event) => {
       let target = $(event.currentTarget)
-
-      // TODO extension for MDC float mdc label
-      dropdown.find('.mdc-floating-label').addClass('mdc-floating-label--float-above')
 
       // set id to hidden
       if (!target.data('id')) throw new Error('Required data-id attribute in .dropdown-item')
