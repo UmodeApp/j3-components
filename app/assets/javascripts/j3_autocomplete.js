@@ -105,6 +105,8 @@ class J3AutocompleteDropdown {
             })
           }
 
+          // trigger event
+          dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:getResults', [dropdown])
         })
       }
     }
