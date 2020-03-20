@@ -24,13 +24,16 @@
 
   <p>AJAX Call and Search</p>
   <div class="form-group">
-    <%= f.j3_mdc_autocomplete :episode_ajax_and_search, 'data-url': episodes_path, value: 2 %>
+    <%= f.j3_mdc_autocomplete :episode_ajax_and_search, 'data-url': episodes_components_path, value: 2 %>
   </div>
 
   <p>Relative</p>
   <div class="form-group">
-    <%= f.j3_mdc_autocomplete :episode_relatives, 'data-url': heroes_path, 'data-relative': '#episode_ajax_and_search', 'data-chained-relative': true %>
+    <%= f.j3_mdc_autocomplete :episode_relatives, 'data-url': heroes_components_path, 'data-relative': '#episode_ajax_and_search', 'data-chained-relative': true, value: 2 %>
   </div>
-
-
+  
+  <div class="mt-4">
+    <hr/>
+    <%= f.submit class: 'mdc-button mdc-button--raised btn-success' %>
+  </div>
 <% end %>

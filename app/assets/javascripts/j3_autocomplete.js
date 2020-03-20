@@ -6,11 +6,11 @@ $(() => {
 })
 
 // JQuery plugin for j3_autocomplete component
-$.fn.j3_autocomplete = function() {
+$.fn.j3_autocomplete = function(forceClear = false) {
   dropdown = $(this)
   if (dropdown.length > 0) {
     dropdown.j3_autocomplete_dropdown = new J3AutocompleteDropdown(dropdown)
-    dropdown.j3_autocomplete_dropdown.init(dropdown)
+    dropdown.j3_autocomplete_dropdown.init(dropdown, forceClear)
   }
   return dropdown
 }
@@ -23,12 +23,12 @@ class J3AutocompleteDropdown {
     this.dropdown = dropdown
 
     // Init dropdown component
-    this.init = (dropdown) => {
+    this.init = (dropdown, forceClear) => {
       if (dropdown.j3_autocomplete_dropdown.isEnabled(dropdown)) {
         dropdown.removeClass('d-none')
         if (dropdown.j3_autocomplete_dropdown.val() != '') {
           // if has value, load data and set value
-          dropdown.j3_autocomplete_dropdown.bindShowEvent(dropdown, false)
+          dropdown.j3_autocomplete_dropdown.bindShowEvent(dropdown, forceClear)
         } else {
           // bind event on dropdown show
           dropdown.off('show.bs.dropdown').on('show.bs.dropdown', () => dropdown.j3_autocomplete_dropdown.bindShowEvent(dropdown))
@@ -75,9 +75,10 @@ class J3AutocompleteDropdown {
     }
 
     // Call URL and fill autocompleteResults container
-    this.getResults = (autocompleteResults, dropdown, clear = true) => {
+    this.getResults = (autocompleteResults, dropdown, forceClear = true) => {
       if (dropdown.data('url')) {
-        if (clear) dropdown.j3_autocomplete_dropdown.clear(dropdown)
+        console.log(`[j3_autocomplete] getResults for ${dropdown.find('.j3_autocomplete__input').prop('id')}`, forceClear)
+        if (forceClear) dropdown.j3_autocomplete_dropdown.clear(dropdown)
         let url = dropdown.j3_autocomplete_dropdown.url(dropdown)
         let value = dropdown.j3_autocomplete_dropdown.val()
         $.get(url, (response) => {
@@ -100,7 +101,7 @@ class J3AutocompleteDropdown {
             autocompleteResults.find('.dropdown-item').each((index, itemEl) => {
               let item = $(itemEl)
               if (item.data('id') == value)
-                dropdown.j3_autocomplete_dropdown.selected(dropdown, item.html())
+                dropdown.j3_autocomplete_dropdown.selected(dropdown, item.html(), forceClear)
             })
           }
 
@@ -138,7 +139,7 @@ class J3AutocompleteDropdown {
       }
     }
 
-    this.selected = (dropdown, html) => {
+    this.selected = (dropdown, html, forceClear = true) => {
       // set html to input
       dropdown.find('.j3_autocomplete__label').html(html)
       // float mdc label
@@ -146,7 +147,7 @@ class J3AutocompleteDropdown {
       // add selected class to dropdown to extend css capabilities
       dropdown.addClass('selected')
       // check relatives
-      dropdown.j3_autocomplete_dropdown.checkRelatives(dropdown)
+      dropdown.j3_autocomplete_dropdown.checkRelatives(dropdown, forceClear)
       // trigger change event
       dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:change', [dropdown])
     }
@@ -160,17 +161,16 @@ class J3AutocompleteDropdown {
       dropdown.find('input[type="hidden"]').val(target.data('id'))
 
       // set html to input
-      dropdown.j3_autocomplete_dropdown.selected(dropdown, target.html())
+      dropdown.j3_autocomplete_dropdown.selected(dropdown, target.html(), true)
     }
 
     // Show all relatives autocompletes
-    this.checkRelatives = (dropdown) => {
+    this.checkRelatives = (dropdown, forceClear = true) => {
       let inputId = dropdown.find('.j3_autocomplete__input').prop('id')
       // show all j3_autocomplete with this as relative
       let relative = $(`.j3_autocomplete[data-relative="#${inputId}"]`)
       if (relative.length > 0) {
-        relative = relative.j3_autocomplete()
-        relative.j3_autocomplete_dropdown.clear(relative)
+        relative = relative.j3_autocomplete(forceClear)
       }
     }
 

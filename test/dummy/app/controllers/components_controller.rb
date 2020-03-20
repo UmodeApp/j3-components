@@ -1,8 +1,12 @@
-class J3::ComponentsController < ApplicationController
+class ComponentsController < ApplicationController
   before_action :set_episodes, :set_heroes
 
   def index
     @form_object = { episode_ajax_and_search: 2 }
+  end
+
+  def create
+    render html: "#{params.to_json.gsub(",", ",<br>&nbsp;&nbsp;")}".html_safe
   end
 
   def episodes
