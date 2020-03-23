@@ -39,7 +39,7 @@ module J3Components
     end
 
     def j3_autocomplete__input(field, options = {})
-      tag.a(href: '#', 'data-toggle': :dropdown, 'aria-haspopup': true, 'aria-expanded': false, class: options.delete(:input_container_class)) do
+      tag.a(href: '#', 'data-toggle': :dropdown, 'aria-haspopup': true, 'aria-expanded': false, class: "#{f.object.errors[field].any? ? 'mdc-text-field--invalid' : ''} #{options.delete(:input_container_class)}") do
         html = []
         hidden_class = 'j3_autocomplete__input'
         if options[:value].present? 
