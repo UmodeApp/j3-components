@@ -9,7 +9,11 @@ $(() => {
 $.fn.j3_autocomplete = function(forceClear = false) {
   dropdown = $(this)
   if (dropdown.length > 0) {
+    // Create foundation in jquery object
     dropdown.foundation = new J3AutocompleteDropdown(dropdown)
+    // Associate to html element too
+    dropdown[0].foundation = dropdown.foundation
+    // Init foundation
     dropdown.foundation.init(dropdown, forceClear)
   }
   return dropdown
