@@ -188,7 +188,7 @@ class J3AutocompleteDropdown {
     // Show all relatives autocompletes
     this.checkRelatives = (dropdown, forceClear = true) => {
       // show all j3_autocomplete with this as relative
-      let relative = findRelatives(dropdown)
+      let relative = dropdown.foundation.findRelatives(dropdown)
       if (relative.length > 0) {
         relative = relative.j3_autocomplete(forceClear)
       }
