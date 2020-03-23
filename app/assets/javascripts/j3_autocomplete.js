@@ -187,13 +187,14 @@ class J3AutocompleteDropdown {
 
     // Show all relatives autocompletes
     this.checkRelatives = (dropdown, forceClear = true) => {
-      let inputId = dropdown.find('.j3_autocomplete__input').prop('id')
       // show all j3_autocomplete with this as relative
-      let relative = $(`.j3_autocomplete[data-relative="#${inputId}"]`)
+      let relative = findRelatives(dropdown)
       if (relative.length > 0) {
         relative = relative.j3_autocomplete(forceClear)
       }
     }
+
+    this.findRelatives = (dropdown) => $(`.j3_autocomplete[data-relative="#${dropdown.find('.j3_autocomplete__input').prop('id')}"]`)
 
     this.clear = (dropdown) => {
       dropdown.removeClass('selected')
