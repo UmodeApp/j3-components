@@ -9,8 +9,8 @@ $(() => {
 $.fn.j3_autocomplete = function(forceClear = false) {
   dropdown = $(this)
   if (dropdown.length > 0) {
-    dropdown.j3_autocomplete_dropdown = new J3AutocompleteDropdown(dropdown)
-    dropdown.j3_autocomplete_dropdown.init(dropdown, forceClear)
+    dropdown.foundation = new J3AutocompleteDropdown(dropdown)
+    dropdown.foundation.init(dropdown, forceClear)
   }
   return dropdown
 }
@@ -24,14 +24,14 @@ class J3AutocompleteDropdown {
 
     // Init dropdown component
     this.init = (dropdown, forceClear) => {
-      if (dropdown.j3_autocomplete_dropdown.isEnabled(dropdown)) {
+      if (dropdown.foundation.isEnabled(dropdown)) {
         dropdown.removeClass('d-none')
-        if (dropdown.j3_autocomplete_dropdown.val() != '') {
+        if (dropdown.foundation.val() != '') {
           // if has value, load data and set value
-          dropdown.j3_autocomplete_dropdown.bindShowEvent(dropdown, forceClear)
+          dropdown.foundation.bindShowEvent(dropdown, forceClear)
         } else {
           // bind event on dropdown show
-          dropdown.off('show.bs.dropdown').on('show.bs.dropdown', () => dropdown.j3_autocomplete_dropdown.bindShowEvent(dropdown))
+          dropdown.off('show.bs.dropdown').on('show.bs.dropdown', () => dropdown.foundation.bindShowEvent(dropdown))
         }
       } else {
         // add disabled class
@@ -41,12 +41,10 @@ class J3AutocompleteDropdown {
 
     // Init dropdown events and load results
     this.bindShowEvent = (dropdown, clear = true) => {
-      // Puts progress
-      let autocompleteResults = dropdown.find('.dropdown-menu .autocomplete-results')
-      autocompleteResults.j3_progress()
-
       // Call URL
-      dropdown.j3_autocomplete_dropdown.getResults(autocompleteResults, dropdown, clear)
+      dropdown.foundation.getResults(dropdown, clear)
+
+      // Prevents show to load again
       dropdown.off('show.bs.dropdown')
     }
 
@@ -57,14 +55,14 @@ class J3AutocompleteDropdown {
 
       // Check searchQuery
       let searchQuery = dropdown.find('.j3_autocomplete__search').val() || ''
-      if (searchQuery.length > 0) url = `${url}${dropdown.j3_autocomplete_dropdown.urlSeparator(url)}keyword=${searchQuery}`
+      if (searchQuery.length > 0) url = `${url}${dropdown.foundation.urlSeparator(url)}keyword=${searchQuery}`
 
       // Check value
-      if (dropdown.j3_autocomplete_dropdown.val() !== undefined && dropdown.j3_autocomplete_dropdown.val() != '')
-        url = `${url}${dropdown.j3_autocomplete_dropdown.urlSeparator(url)}value=${dropdown.j3_autocomplete_dropdown.val()}`
+      if (dropdown.foundation.val() !== undefined && dropdown.foundation.val() != '')
+        url = `${url}${dropdown.foundation.urlSeparator(url)}value=${dropdown.foundation.val()}`
 
       // Check relatives
-      if (dropdown.data('relative')) url = `${url}${dropdown.j3_autocomplete_dropdown.urlSeparator(url)}relative=${dropdown.j3_autocomplete_dropdown.getRelativeVal(dropdown)}`
+      if (dropdown.data('relative')) url = `${url}${dropdown.foundation.urlSeparator(url)}relative=${dropdown.foundation.getRelativeVal(dropdown)}`
 
       return url
     }
@@ -75,12 +73,22 @@ class J3AutocompleteDropdown {
     }
 
     // Call URL and fill autocompleteResults container
-    this.getResults = (autocompleteResults, dropdown, forceClear = true) => {
+    this.getResults = (dropdown, forceClear = true) => {
       if (dropdown.data('url')) {
         console.log(`[j3_autocomplete] getResults for ${dropdown.find('.j3_autocomplete__input').prop('id')}`, forceClear)
-        if (forceClear) dropdown.j3_autocomplete_dropdown.clear(dropdown)
-        let url = dropdown.j3_autocomplete_dropdown.url(dropdown)
-        let value = dropdown.j3_autocomplete_dropdown.val()
+    
+        // Puts progress
+        let autocompleteResults = dropdown.find('.dropdown-menu .autocomplete-results')
+        autocompleteResults.j3_progress()
+
+        // Clear
+        if (forceClear) dropdown.foundation.clear(dropdown)
+
+        // Get URL and value
+        let url = dropdown.foundation.url(dropdown)
+        let value = dropdown.foundation.val()
+
+        // Call URL
         $.get(url, (response) => {
           // unbind search to prevent double requests
           dropdown.find('.j3_autocomplete__search').off('keyup') 
@@ -90,10 +98,10 @@ class J3AutocompleteDropdown {
 
           // bind item click event
           autocompleteResults.find('.records .dropdown-item').off('click').on('click', (event) => {
-            dropdown.j3_autocomplete_dropdown.bindDropDownItemEvent(dropdown, event)
+            dropdown.foundation.bindDropDownItemEvent(dropdown, event)
           })
           dropdown.find('.j3_autocomplete__search').on('keyup', (event) => {
-            dropdown.j3_autocomplete_dropdown.bindSearchEvent(dropdown, event)
+            dropdown.foundation.bindSearchEvent(dropdown, event)
           })
 
           // render selected
@@ -101,12 +109,12 @@ class J3AutocompleteDropdown {
             autocompleteResults.find('.dropdown-item').each((index, itemEl) => {
               let item = $(itemEl)
               if (item.data('id') == value)
-                dropdown.j3_autocomplete_dropdown.selected(dropdown, item.html(), forceClear)
+                dropdown.foundation.selected(dropdown, item.html(), forceClear)
             })
           }
 
           // bind save and redirect events
-          dropdown.j3_autocomplete_dropdown.bindSaveAndRedirectEvents(dropdown)
+          dropdown.foundation.bindSaveAndRedirectEvents(dropdown)
 
           // trigger event
           dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:getResults', [dropdown])
@@ -140,15 +148,15 @@ class J3AutocompleteDropdown {
     this.bindSearchEvent = (dropdown, event) => {
       let key = event.originalEvent.code
       // Check if char is allowed
-      if (dropdown.j3_autocomplete_dropdown.ALLOWED_CONTROL_KEYS.includes(key) || key.startsWith('Key') || key.startsWith('Digit')) {
+      if (dropdown.foundation.ALLOWED_CONTROL_KEYS.includes(key) || key.startsWith('Key') || key.startsWith('Digit')) {
         // prevent sequential submits using timer
-        clearTimeout(dropdown.j3_autocomplete_dropdown.timer)
+        clearTimeout(dropdown.foundation.timer)
 
         // create timer 
-        dropdown.j3_autocomplete_dropdown.timer = setTimeout(function() {
+        dropdown.foundation.timer = setTimeout(function() {
           // Reload items
-          dropdown.j3_autocomplete_dropdown.bindShowEvent(dropdown)
-        }, dropdown.j3_autocomplete_dropdown.TIMEOUT)
+          dropdown.foundation.bindShowEvent(dropdown)
+        }, dropdown.foundation.TIMEOUT)
       }
     }
 
@@ -160,7 +168,7 @@ class J3AutocompleteDropdown {
       // add selected class to dropdown to extend css capabilities
       dropdown.addClass('selected')
       // check relatives
-      dropdown.j3_autocomplete_dropdown.checkRelatives(dropdown, forceClear)
+      dropdown.foundation.checkRelatives(dropdown, forceClear)
       // trigger change event
       dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:change', [dropdown])
     }
@@ -174,7 +182,7 @@ class J3AutocompleteDropdown {
       dropdown.find('input[type="hidden"]').val(target.data('id'))
 
       // set html to input
-      dropdown.j3_autocomplete_dropdown.selected(dropdown, target.html(), true)
+      dropdown.foundation.selected(dropdown, target.html(), true)
     }
 
     // Show all relatives autocompletes
@@ -199,7 +207,7 @@ class J3AutocompleteDropdown {
       if (dropdown.data('chained-relative')) {
         if (!dropdown.data('relative')) throw new Error('Required data-relative attribute in .j3_autocomplete')
         // if relative has value this component is enabled
-        return dropdown.j3_autocomplete_dropdown.getRelativeVal(dropdown) != ''
+        return dropdown.foundation.getRelativeVal(dropdown) != ''
       }
       return true
     }
