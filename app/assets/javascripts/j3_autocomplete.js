@@ -106,7 +106,7 @@ class J3AutocompleteDropdown {
           }
 
           // bind save and redirect events
-          bindSaveAndRedirectEvents(dropdown)
+          dropdown.j3_autocomplete_dropdown.bindSaveAndRedirectEvents(dropdown)
 
           // trigger event
           dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:getResults', [dropdown])
