@@ -10,6 +10,4 @@ module J3Components
   end
 end
 
-class ApplicationController < ActionController::Base
-  include J3Components::ActsAsRedirectableCreate
-end
+ActionController::Base.send(:include, J3Components::ActsAsRedirectableCreate)

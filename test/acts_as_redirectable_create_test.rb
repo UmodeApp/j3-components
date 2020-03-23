@@ -2,7 +2,8 @@ require 'test_helper'
 
 class ActsAsRedirectableCreateTest < ActiveSupport::TestCase
   test 'includes module SaveSessionAndRedirect' do
-    TestController.included_modules.include?(J3Components::SaveSessionAndRedirect)
+    assert_equal 'dummy', TestController.new.dummy, 'preserves ApplicationController methods'
+    assert TestController.included_modules.include?(J3Components::SaveSessionAndRedirect), 'include module'
   end
 
   class TestController < ApplicationController
