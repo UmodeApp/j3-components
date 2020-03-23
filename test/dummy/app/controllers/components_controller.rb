@@ -1,4 +1,5 @@
 class ComponentsController < ApplicationController
+  acts_as_redirectable_create
   before_action :set_episodes, :set_heroes
 
   def index

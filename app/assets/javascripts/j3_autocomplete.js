@@ -105,10 +105,21 @@ class J3AutocompleteDropdown {
             })
           }
 
+          // bind save and redirect events
+          bindSaveAndRedirectEvents(dropdown)
+
           // trigger event
           dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:getResults', [dropdown])
         })
       }
+    }
+
+    // Submit form when dropdown menu has a button and set j3_autocomplete__redirect hidden input
+    this.bindSaveAndRedirectEvents = (dropdown) => {
+      dropbox.find('.dropdown-menu .mdc-button').on('click', (e) => {
+        $(dropdown.find('input')[0].form).append(`<input type="hidden" name="j3_autocomplete__redirect" value="${$(e.currentTarget).prop('href')}" />`).submit()
+        return false
+      })
     }
 
     // Value of autocomplete component
