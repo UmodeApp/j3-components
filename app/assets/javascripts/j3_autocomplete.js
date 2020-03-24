@@ -47,9 +47,6 @@ class J3AutocompleteDropdown {
     this.bindShowEvent = (dropdown, clear = true) => {
       // Call URL
       dropdown.foundation.getResults(dropdown, clear)
-
-      // Prevents show to load again
-      dropdown.off('show.bs.dropdown')
     }
 
     // Check URL param exists, add search query if not blank and relatives
@@ -116,10 +113,10 @@ class J3AutocompleteDropdown {
                 dropdown.foundation.selected(dropdown, item.html(), forceClear)
             })
           }
-
           // bind save and redirect events
           dropdown.foundation.bindSaveAndRedirectEvents(dropdown)
-
+          // Prevents show to load again
+          dropdown.off('show.bs.dropdown')
           // trigger event
           dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:getResults', [dropdown])
         })
