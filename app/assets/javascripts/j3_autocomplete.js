@@ -112,7 +112,7 @@ class J3AutocompleteDropdown {
             autocompleteResults.find('.dropdown-item').each((index, itemEl) => {
               let item = $(itemEl)
               if (item.data('id') == value)
-                dropdown.foundation.selected(dropdown, item.html(), forceClear)
+                dropdown.foundation.selected(dropdown, item, forceClear)
             })
           }
           // bind save and redirect events
@@ -163,9 +163,9 @@ class J3AutocompleteDropdown {
       }
     }
 
-    this.selected = (dropdown, html, forceClear = true) => {
+    this.selected = (dropdown, item, forceClear = true) => {
       // set html to input
-      dropdown.find('.j3_autocomplete__label').html(html)
+      dropdown.find('.j3_autocomplete__label').html(item.html())
       // float mdc label
       dropdown.find('.mdc-floating-label').addClass('mdc-floating-label--float-above')
       // add selected class to dropdown to extend css capabilities
@@ -173,7 +173,7 @@ class J3AutocompleteDropdown {
       // check relatives
       dropdown.foundation.checkRelatives(dropdown, forceClear)
       // trigger change event
-      dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:change', [dropdown])
+      dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:change', [dropdown, item])
     }
 
     // Bind click event for dropdown items
@@ -185,7 +185,7 @@ class J3AutocompleteDropdown {
       dropdown.find('input[type="hidden"]').val(target.data('id'))
 
       // set html to input
-      dropdown.foundation.selected(dropdown, target.html(), true)
+      dropdown.foundation.selected(dropdown, target, true)
     }
 
     // Show all relatives autocompletes
