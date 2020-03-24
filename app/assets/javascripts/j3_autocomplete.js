@@ -9,6 +9,8 @@ $(() => {
 $.fn.j3_autocomplete = function(forceClear = false) {
   dropdown = $(this)
   if (dropdown.length > 0) {
+    // Prevents double initialization
+    if (dropdown[0].foundation) return dropdown
     // Create foundation in jquery object
     dropdown.foundation = new J3AutocompleteDropdown(dropdown)
     // Associate to html element too
