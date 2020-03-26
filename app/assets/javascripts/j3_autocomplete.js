@@ -127,7 +127,7 @@ class J3AutocompleteDropdown {
 
     // Submit form when dropdown menu has a button and set j3_autocomplete__redirect hidden input
     this.bindSaveAndRedirectEvents = (dropdown) => {
-      dropdown.find('.dropdown-menu[data-save-session]').on('click', (e) => {
+      dropdown.find('.dropdown-menu .dropdown-item[data-save-session]').on('click', (e) => {
         $(dropdown.find('input')[0].form).append(`<input type="hidden" name="j3_autocomplete__redirect" value="${$(e.currentTarget).prop('href')}" />`).submit()
         return false
       })
