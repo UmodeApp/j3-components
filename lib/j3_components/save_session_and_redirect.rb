@@ -29,11 +29,13 @@ module J3Components
       session[:j3_autocomplete__session] ||= {}
       if params[:j3_autocomplete__redirect].present?
         session[:j3_autocomplete__session][controller_name] = params
+        Rails.logger.debug('[j3_autocomplete] Param j3_autocomplete__redirect found, savind session and redirect')
         redirect_to params[:j3_autocomplete__redirect]
       else
         if session[:j3_autocomplete__session][controller_name].present?
+          Rails.logger.debug('[j3_autocomplete] Session j3_autocomplete__session found, restoring session')
           old_params = params.permit!.to_h
-          new_params = session[:j3_autocomplete__session].delete(controller_name) 
+          new_params = session[:j3_autocomplete__session].delete(controller_name)
           convert_redirected_param(old_params, new_params)
           @params = ActionController::Parameters.new new_params
         end
