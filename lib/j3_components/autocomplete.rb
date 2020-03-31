@@ -30,7 +30,6 @@ module J3Components
     private
 
     def j3_autocomplete__append_params_to_url(options)
-      debugger
       url = options[:'data-url']
       if url.present?
         uri = URI.parse(url)
