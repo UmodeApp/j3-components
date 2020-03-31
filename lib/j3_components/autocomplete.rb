@@ -29,12 +29,20 @@ module J3Components
 
     private
 
+    # If autocomplete is in a form that was submited, you will need the parent 
+    # controller action to build the right return_path after create a new 
+    # record in autocomplete. The parent return_path is passed to parameter as 
+    # well
     def j3_autocomplete__append_params_to_url(options)
       url = options[:'data-url']
       if url.present?
         uri = URI.parse(url)
         uri.query = uri.query.blank? ? '' : "#{uri.query}&"
-        uri.query = "#{uri.query}parent_controller_action=#{self.instance_values['template'].controller.action_name}"
+        # add parent controller action
+        uri.query = "#{uri.query}parent_controller_action=#{instance_values['template'].controller.action_name}"
+        # check return path
+        parent_return_path = instance_values['template'].request.params[:return_path]
+        uri.query = "#{uri.query}&return_path=#{CGI.escape(parent_return_path)}" unless parent_return_path.blank?
         options[:'data-url'] = uri.to_s
       end
       options
