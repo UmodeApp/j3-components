@@ -50,7 +50,8 @@ module J3Components
 
     def j3_autocomplete__parse_url(options)
       url = options[:'data-url']
-      options[:data][:url] if url.blank? && options[:data].present?
+      url = options[:data][:url] if url.blank? && options[:data].present?
+      url
     end
 
     def j3_autocomplete__menu
