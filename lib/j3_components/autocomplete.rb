@@ -22,12 +22,24 @@ module J3Components
     #   j3_autocomplete(:episode, input_class: 'mdc-text-field')
     def j3_autocomplete(field, options = {})
       input_and_menu = j3_autocomplete__input(field, options) + j3_autocomplete__menu
-      tag.div({ class: 'dropdown j3_autocomplete' }.merge(options)) do
+      tag.div({ class: 'dropdown j3_autocomplete' }.merge(j3_autocomplete__append_params_to_url(options))) do
         input_and_menu
       end
     end
 
     private
+
+    def j3_autocomplete__append_params_to_url(options)
+      debugger
+      url = options[:'data-url']
+      if url.present?
+        uri = URI.parse(url)
+        uri.query = uri.query.blank? ? '' : "#{uri.query}&"
+        uri.query = "#{uri.query}parent_controller_action=#{self.instance_values['template'].controller.action_name}"
+        options[:'data-url'] = uri.to_s
+      end
+      options
+    end
 
     def j3_autocomplete__menu
       tag.div(j3_autocomplete__search_tag + tag.div(class: 'autocomplete-results'), class: 'dropdown-menu w-100')
