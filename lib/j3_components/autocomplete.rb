@@ -42,7 +42,7 @@ module J3Components
         uri.query = "#{uri.query}parent_controller_action=#{instance_values['template'].controller.action_name}"
         # check return path
         parent_return_path = instance_values['template'].request.params[:return_path]
-        uri.query = "#{uri.query}&return_path=#{CGI.escape(parent_return_path)}" unless parent_return_path.blank?
+        uri.query = "#{uri.query}&parent_return_path=#{CGI.escape(parent_return_path)}" unless parent_return_path.blank?
         options[:'data-url'] = uri.to_s
       end
       options
