@@ -49,6 +49,7 @@ module J3Components
     end
 
     def j3_autocomplete__parse_url(options)
+      debugger
       url = options[:'data-url']
       url = options[:data][:url] if url.blank? && options[:data].present?
       url
