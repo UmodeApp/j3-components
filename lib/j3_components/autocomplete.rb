@@ -35,6 +35,7 @@ module J3Components
     # well
     def j3_autocomplete__append_params_to_url(options)
       url = options[:'data-url']
+      debugger
       if url.present?
         uri = URI.parse(url)
         uri.query = uri.query.blank? ? '' : "#{uri.query}&"
