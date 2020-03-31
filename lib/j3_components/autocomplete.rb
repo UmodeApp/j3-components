@@ -34,8 +34,7 @@ module J3Components
     # record in autocomplete. The parent return_path is passed to parameter as 
     # well
     def j3_autocomplete__append_params_to_url(options)
-      url = options[:'data-url']
-      debugger
+      url = j3_autocomplete__parse_url(options)
       if url.present?
         uri = URI.parse(url)
         uri.query = uri.query.blank? ? '' : "#{uri.query}&"
@@ -47,6 +46,11 @@ module J3Components
         options[:'data-url'] = uri.to_s
       end
       options
+    end
+
+    def j3_autocomplete__parse_url(options)
+      url = options[:'data-url']
+      options[:data][:url] if url.blank? && options[:data].present?
     end
 
     def j3_autocomplete__menu
