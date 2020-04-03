@@ -11,3 +11,4 @@ test/dummy/tmp/
 tmp
 node_modules
 .byebug_history
+coverage/

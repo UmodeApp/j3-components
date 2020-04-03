@@ -1,10 +1,7 @@
 class ComponentsController < ApplicationController
   acts_as_redirectable_create
   before_action :set_episodes, :set_heroes
-
-  def index
-    @form_object = { episode_ajax_and_search: 2 }
-  end
+  before_action :set_form
 
   def create
     render html: "#{params.to_json.gsub(",", ",<br>&nbsp;&nbsp;")}".html_safe
@@ -44,5 +41,9 @@ class ComponentsController < ApplicationController
       [3, 'Ray', [7, 8, 9]],
       [4, 'Luke Skywalker', [1, 2, 3]]
     ]
+  end
+
+  def set_form
+    @form_object = { episode_ajax_and_search: 2 }
   end
 end

@@ -30,8 +30,18 @@
   },
   "homepage": "http://rubyonrails.org/",
   "devDependencies": {
+    "bootstrap": "^4.4.1",
     "coffeelint": "^2.1.0",
-    "eslint": "^2.13.1"
+    "eslint": "^2.13.1",
+    "istanbul": "^0.4.5",
+    "jasmine": "^3.5.0",
+    "jasmine-core": "^3.5.0",
+    "jasmine-jquery": "^2.1.1",
+    "jquery": "^3.4.1",
+    "karma": "^4.4.1",
+    "karma-chrome-launcher": "^3.1.0",
+    "karma-coverage": "^2.0.1",
+    "karma-jasmine": "^3.1.1"
   },
   "dependencies": {
     "blade": "^3.3.1"

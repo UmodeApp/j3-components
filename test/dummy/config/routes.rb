@@ -4,6 +4,7 @@ Rails.application.routes.draw do
       get '/', action: :index
       get 'episodes'
       get 'heroes'
+      get 'multiple'
     end
   end
 end

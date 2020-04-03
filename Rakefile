@@ -71,3 +71,6 @@ namespace :assets do
     end
   end
 end
+
+require 'jasmine'
+load 'jasmine/tasks/jasmine.rake'
