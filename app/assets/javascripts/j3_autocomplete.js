@@ -158,6 +158,7 @@ class J3AutocompleteDropdown {
         // create timer 
         dropdown.foundation.timer = setTimeout(function() {
           // Reload items
+          console.log(`[j3_autocomplete] search for ${dropdown.find('.j3_autocomplete__search').val()}`)
           dropdown.foundation.bindShowEvent(dropdown)
         }, dropdown.foundation.TIMEOUT)
       }
