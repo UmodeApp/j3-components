@@ -1,9 +1,10 @@
-$(() => {
+const j3_autocomplete_autoInit = () => {
   // Auto init j3_autocomplete component
   $('.j3_autocomplete').each((_index, object) => {
     $(object).j3_autocomplete()
   })
-})
+}
+$(document).ready(j3_autocomplete_autoInit)
 
 // JQuery plugin for j3_autocomplete component
 $.fn.j3_autocomplete = function(forceClear = false) {
