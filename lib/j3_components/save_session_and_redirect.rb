@@ -8,6 +8,10 @@ module J3Components
       helper_method :params
     end
 
+    def params
+      @params.present? ? @params : super
+    end
+
     protected
 
     def saved_redirect_to(path_to_redirect, record)
@@ -48,10 +52,6 @@ module J3Components
 
       attribute_name = old_params[:redirected_type].underscore + '_id'
       new_params[controller_name.singularize][attribute_name] = old_params[:redirected_id] if new_params[controller_name.singularize].present?
-    end
-
-    def params
-      @params.present? ? @params : super
     end
   end
 end
