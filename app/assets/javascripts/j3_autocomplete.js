@@ -78,20 +78,20 @@ class J3AutocompleteDropdown {
 
     // Call URL and fill autocompleteResults container
     this.getResults = (dropdown, forceClear = true) => {
+      console.log(`[j3_autocomplete] getResults for ${dropdown.find('.j3_autocomplete__input').prop('id')}`, forceClear)
+      // Clear
+      if (forceClear) dropdown.foundation.clear(dropdown)
+      // Get results container
+      let autocompleteResults = dropdown.find('.dropdown-menu .autocomplete-results')
+      // value
+      let value = dropdown.foundation.val()
+
+      // Load from url
       if (dropdown.data('url')) {
-        console.log(`[j3_autocomplete] getResults for ${dropdown.find('.j3_autocomplete__input').prop('id')}`, forceClear)
-    
         // Puts progress
-        let autocompleteResults = dropdown.find('.dropdown-menu .autocomplete-results')
         autocompleteResults.j3_progress()
-
-        // Clear
-        if (forceClear) dropdown.foundation.clear(dropdown)
-
-        // Get URL and value
+        // Get URL
         let url = dropdown.foundation.url(dropdown)
-        let value = dropdown.foundation.val()
-
         // Call URL
         $.get(url, (response) => {
           // unbind search to prevent double requests
@@ -99,15 +99,6 @@ class J3AutocompleteDropdown {
 
           // render results
           autocompleteResults.html(response)
-
-          // bind item click event
-          autocompleteResults.find('.records .dropdown-item').off('click').on('click', (event) => {
-            dropdown.foundation.bindDropDownItemEvent(dropdown, event)
-          })
-          dropdown.find('.j3_autocomplete__search').on('keyup', (event) => {
-            dropdown.foundation.bindSearchEvent(dropdown, event)
-          })
-
           // render selected
           if (value != '') {
             autocompleteResults.find('.dropdown-item').each((index, itemEl) => {
@@ -116,14 +107,45 @@ class J3AutocompleteDropdown {
                 dropdown.foundation.selected(dropdown, item, forceClear)
             })
           }
-          // bind save and redirect events
-          dropdown.foundation.bindSaveAndRedirectEvents(dropdown)
-          // Prevents show to load again
-          dropdown.off('show.bs.dropdown')
-          // trigger event
-          dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:getResults', [dropdown])
+          // bind events
+          this.bindDropdownMenuEvents(dropdown, autocompleteResults)
         })
       }
+
+      // Load from datalist
+      else if (dropdown.data('list')) {
+        let recordsDiv = $('<div class="records"></div>')
+        autocompleteResults.append(recordsDiv)
+        
+        dropdown.data('list').forEach((record) => {
+          // create dropdown-item
+          let item = `<div class="dropdown-item" data-id="${record.id}">${record.name}</div>`
+          // set value
+          if (record.id == value) dropdown.foundation.selected(dropdown, item, forceClear)
+          // append to records
+          recordsDiv.append(item)
+          // bind events
+          this.bindDropdownMenuEvents(dropdown, autocompleteResults)
+        })
+      }
+      return true
+    }
+
+    this.bindDropdownMenuEvents = (dropdown, autocompleteResults) => {
+      // bind item click event
+      autocompleteResults.find('.records .dropdown-item').off('click').on('click', (event) => {
+        dropdown.foundation.bindDropDownItemEvent(dropdown, event)
+      })
+      // bind search event
+      dropdown.find('.j3_autocomplete__search').on('keyup', (event) => {
+        dropdown.foundation.bindSearchEvent(dropdown, event)
+      })
+      // bind save and redirect events
+      dropdown.foundation.bindSaveAndRedirectEvents(dropdown)
+      // Prevents show to load again
+      dropdown.off('show.bs.dropdown')
+      // trigger event
+      dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:getResults', [dropdown])
     }
 
     // Submit form when dropdown menu has a button and set j3_autocomplete__redirect hidden input

@@ -5,6 +5,7 @@ module J3Components
     def j3_mdc_autocomplete(field, options)
       j3_autocomplete(field, { input_container_class: 'mdc-text-field w-100', input_class: 'mdc-text-field__input w-100', label_class: 'mdc-floating-label' }.merge(options))
     end
+
     ##
     # Render j3 autocomplete component
     #
