@@ -22,7 +22,7 @@ module J3Components
     #
     #   j3_autocomplete(:episode, input_class: 'mdc-text-field')
     def j3_autocomplete(field, options = {})
-      input_and_menu = j3_autocomplete__input(field, options) + j3_autocomplete__menu
+      input_and_menu = j3_autocomplete__input(field, options) + j3_autocomplete__menu(!options[:'data-list'].present?)
       tag.div({ class: 'dropdown j3_autocomplete' }.merge(j3_autocomplete__append_params_to_url(options))) do
         input_and_menu
       end
@@ -55,8 +55,13 @@ module J3Components
       url
     end
 
-    def j3_autocomplete__menu
-      tag.div(j3_autocomplete__search_tag + tag.div(class: 'autocomplete-results'), class: 'dropdown-menu w-100')
+    def j3_autocomplete__menu(include_search_tag = true)
+      tag.div(class: 'dropdown-menu w-100') do
+        html = []
+        html << j3_autocomplete__search_tag if include_search_tag
+        html << tag.div(class: 'autocomplete-results')
+        html.join.html_safe
+      end
     end
 
     # Render a search input for autocomplete
@@ -68,12 +73,20 @@ module J3Components
       tag.a(href: '#', 'data-toggle': :dropdown, 'aria-haspopup': true, 'aria-expanded': false, class: "#{object.present? && object.errors[field].any? ? 'mdc-text-field--invalid' : ''} #{options.delete(:input_container_class)}") do
         html = []
         hidden_class = 'j3_autocomplete__input'
-        if options[:value].present? 
-          html << hidden_field(field, class: hidden_class, value: options.delete(:value))
+        field_name = options[:multiple].present? ? "#{field}[]" : field
+        values = options.delete(:value) || object.send(field)
+        if options[:multiple].present?
+          # try to split with comma if value isnt an Array
+          values = values.split(',') unless values.is_a?(Array)
+          if values.empty?
+            hidden_field(field_name, class: hidden_class, name: field_name)
+          else
+            values.each { |value| html << hidden_field(field_name, class: hidden_class, value: value, name: field_name) }
+          end
         else
-          html << hidden_field(field, class: hidden_class)
+          html << hidden_field(field_name, class: hidden_class, value: value, name: field_name)
         end
-        html << label(field, class: options.delete(:label_class))
+        html << label(field, for: field_name, class: options.delete(:label_class))
         html << tag.div(class: "j3_autocomplete__label #{options.delete(:input_class)}")
         html.join.html_safe
       end
