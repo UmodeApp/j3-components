@@ -72,24 +72,31 @@ module J3Components
     def j3_autocomplete__input(field, options = {})
       tag.a(href: '#', 'data-toggle': :dropdown, 'aria-haspopup': true, 'aria-expanded': false, class: "#{object.present? && object.errors[field].any? ? 'mdc-text-field--invalid' : ''} #{options.delete(:input_container_class)}") do
         html = []
-        hidden_class = 'j3_autocomplete__input'
-        field_name = options[:multiple].present? ? "#{field}[]" : field
         values = options.delete(:value) || object.send(field)
         if options[:multiple].present?
           # try to split with comma if value isnt an Array
           values = values.split(',') unless values.is_a?(Array)
           if values.empty?
-            hidden_field(field_name, class: hidden_class, name: field_name)
+            html << j3_autocomplete__multiple_value_tag(field, value)
           else
-            values.each { |value| html << hidden_field(field_name, class: hidden_class, value: value, name: field_name) }
+            values.each do |value|
+              html << j3_autocomplete__multiple_value_tag(field, value)
+            end
           end
         else
-          html << hidden_field(field_name, class: hidden_class, value: value, name: field_name)
+          html << j3_autocomplete__multiple_value_tag(field, values)
         end
-        html << label(field, for: field_name, class: options.delete(:label_class))
+        html << label(field, class: options.delete(:label_class))
         html << tag.div(class: "j3_autocomplete__label #{options.delete(:input_class)}")
         html.join.html_safe
       end
     end
+  end
+
+  J3_AUTOCOMPLETE_HIDDEN_CLASS = 'j3_autocomplete__input'.freeze
+  def j3_autocomplete__multiple_value_tag(field, value)
+    tag = hidden_field(field, class: J3_AUTOCOMPLETE_HIDDEN_CLASS, value: value)
+    # replace field name to array
+    tag.gsub(/ name="(.*)"/, 'name="\1[]"')
   end
 end
