@@ -74,29 +74,30 @@ module J3Components
         html = []
         values = options.delete(:value) || object.send(field)
         if options[:multiple].present?
+          values = values.split(',') if values.is_a?(String)
           # try to split with comma if value isnt an Array
-          values = values.split(',') unless values.is_a?(Array)
-          if values.empty?
-            html << j3_autocomplete__multiple_value_tag(field, value)
+          if values.nil? || values.empty?
+            html << j3_autocomplete__hidden_tag(field, values, true)
           else
             values.each do |value|
-              html << j3_autocomplete__multiple_value_tag(field, value)
+              html << j3_autocomplete__hidden_tag(field, value, true)
             end
           end
         else
-          html << j3_autocomplete__multiple_value_tag(field, values)
+          html << j3_autocomplete__hidden_tag(field, values)
         end
         html << label(field, class: options.delete(:label_class))
         html << tag.div(class: "j3_autocomplete__label #{options.delete(:input_class)}")
         html.join.html_safe
       end
     end
-  end
 
-  J3_AUTOCOMPLETE_HIDDEN_CLASS = 'j3_autocomplete__input'.freeze
-  def j3_autocomplete__multiple_value_tag(field, value)
-    tag = hidden_field(field, class: J3_AUTOCOMPLETE_HIDDEN_CLASS, value: value)
-    # replace field name to array
-    tag.gsub(/ name="(.*)"/, 'name="\1[]"')
+    J3_AUTOCOMPLETE_HIDDEN_CLASS = 'j3_autocomplete__input'.freeze
+    def j3_autocomplete__hidden_tag(field, value, multiple = false)
+      tag = hidden_field(field, class: J3_AUTOCOMPLETE_HIDDEN_CLASS, value: value)
+      # replace field name to array
+      tag = tag.gsub(/ name=\\"(.*)\\" id/, 'name="\1[]" id') if multiple
+      tag
+    end
   end
 end
