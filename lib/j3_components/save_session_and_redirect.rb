@@ -39,9 +39,9 @@ module J3Components
         if session[:j3_autocomplete__session][controller_name].present?
           Rails.logger.debug('[j3_autocomplete] Session j3_autocomplete__session found, restoring session')
           old_params = params.permit!.to_h
-          new_params = session[:j3_autocomplete__session].delete(controller_name).permit!.to_h
+          new_params = session[:j3_autocomplete__session].delete(controller_name)
           convert_redirected_param(old_params, new_params)
-          @params = ActionController::Parameters.new new_params
+          @params = ActionController::Parameters.new new_params.permit!.to_h
         end
         yield
       end
