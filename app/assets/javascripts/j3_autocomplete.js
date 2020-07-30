@@ -191,7 +191,7 @@ class J3AutocompleteDropdown {
       // set html to input
       dropdown.find('.j3_autocomplete__label').html(item.html())
       // float mdc label
-      dropdown.find('.mdc-floating-label').addClass('mdc-floating-label--float-above')
+      dropdown.find('label').addClass('mdc-floating-label--float-above').addClass('active')
       // add selected class to dropdown to extend css capabilities
       dropdown.addClass('selected')
       // check relatives
