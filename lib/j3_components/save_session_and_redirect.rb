@@ -8,6 +8,10 @@ module J3Components
       helper_method :params
     end
 
+    def params
+      @params.present? ? @params : super
+    end
+
     protected
 
     def saved_redirect_to(path_to_redirect, record)
@@ -37,7 +41,7 @@ module J3Components
           old_params = params.permit!.to_h
           new_params = session[:j3_autocomplete__session].delete(controller_name)
           convert_redirected_param(old_params, new_params)
-          @params = ActionController::Parameters.new new_params
+          @params = ActionController::Parameters.new new_params.permit!.to_h
         end
         yield
       end
@@ -48,10 +52,6 @@ module J3Components
 
       attribute_name = old_params[:redirected_type].underscore + '_id'
       new_params[controller_name.singularize][attribute_name] = old_params[:redirected_id] if new_params[controller_name.singularize].present?
-    end
-
-    def params
-      @params.present? ? @params : super
     end
   end
 end
