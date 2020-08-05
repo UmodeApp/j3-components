@@ -14,9 +14,9 @@ module J3Components
     #
     # === Options
     #  * data-url: URL for dropdown items ajax request
-    #  * data-datalist: Use a datalist for dropdown items or initial options 
+    #  * data-datalist: Use a datalist for dropdown items or initial options
     #    when data-url is defined.
-    #  * input_container_class: Class for input container for input (dropdown) 
+    #  * input_container_class: Class for input container for input (dropdown)
     #    and label
     #  * label_class: Class for custom label
     #
@@ -30,9 +30,9 @@ module J3Components
 
     private
 
-    # If autocomplete is in a form that was submited, you will need the parent 
-    # controller action to build the right return_path after create a new 
-    # record in autocomplete. The parent return_path is passed to parameter as 
+    # If autocomplete is in a form that was submited, you will need the parent
+    # controller action to build the right return_path after create a new
+    # record in autocomplete. The parent return_path is passed to parameter as
     # well
     def j3_autocomplete__append_params_to_url(options)
       url = j3_autocomplete__parse_url(options)
@@ -96,7 +96,7 @@ module J3Components
     def j3_autocomplete__hidden_tag(field, value, multiple = false)
       tag = hidden_field(field, class: J3_AUTOCOMPLETE_HIDDEN_CLASS, value: value)
       # replace field name to array
-      tag = tag.gsub(/ name=\\"(.*)\\" id/, 'name="\1[]" id') if multiple
+      tag = tag.gsub(/ name=\"(.*)\" id/, 'name="\1[]" id') if multiple
       tag
     end
   end
