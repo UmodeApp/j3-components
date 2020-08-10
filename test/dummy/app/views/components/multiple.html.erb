@@ -1,0 +1,5 @@
+<%= form_with @form_object do |f| %>
+
+  <%= f.j3_mdc_autocomplete :episode_multiple, multiple: true, 'data-url': episodes_components_path %>
+
+<% end %>

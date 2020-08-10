@@ -145,5 +145,5 @@ boot_files:
 #
 # random: false
 #
-random:
+random: false
 
