@@ -205,7 +205,7 @@ class J3AutocompleteDropdown {
     // Mark item as selected
     this.selected = (dropdown, item, forceClear = true) => {
       // float mdc label
-      dropdown.find('.mdc-floating-label').addClass('mdc-floating-label--float-above')
+      dropdown.find('label').addClass('mdc-floating-label--float-above').addClass('active')
       // add selected class to dropdown to extend css capabilities
       dropdown.addClass('selected')
       let selectedTag
