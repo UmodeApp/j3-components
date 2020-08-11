@@ -230,7 +230,7 @@ class J3AutocompleteDropdown {
       // set id to hidden
       if (!target.data('id')) throw new Error('Required data-id attribute in .dropdown-item')
       let input = dropdown.find('input[type="hidden"]')
-      if ($(input).val()) {
+      if (dropdown.foundation.isMultiple() && $(input).val()) {
         input = $(input).clone().insertAfter($(input))
         input.attr('name', `${input.attr('name')}[]`)
       } 
