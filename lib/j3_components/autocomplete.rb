@@ -23,7 +23,7 @@ module J3Components
     #   j3_autocomplete(:episode, input_class: 'mdc-text-field')
     def j3_autocomplete(field, options = {})
       input_and_menu = j3_autocomplete__input(field, options) + j3_autocomplete__menu(!options[:'data-list'].present?)
-      tag.div({ class: %i[dropdown j3_autocomplete].concat(options.delete(:input_container_class) || []).join(' ') }.merge(j3_autocomplete__append_params_to_url(options))) do
+      tag.div({ class: %i[dropdown j3_autocomplete form-control].concat(options.delete(:input_container_class) || []).join(' ') }.merge(j3_autocomplete__append_params_to_url(options))) do
         input_and_menu
       end
     end
