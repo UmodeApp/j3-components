@@ -1,5 +1,5 @@
 # = Autocomplete Helpers
-module ::J3Components
+module J3Components
   module Autocomplete
     # Autocomplete with mdc classes
     def j3_mdc_autocomplete(field, options)

@@ -1,4 +1,4 @@
-module ::J3Components
+module J3Components
   # Controller concern to save session before redirect from an autocomplete new button in dropdown menu
   module SaveSessionAndRedirect
     extend ActiveSupport::Concern

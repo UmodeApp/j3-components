@@ -1,4 +1,4 @@
-module ::J3Components
+module J3Components
   class Railtie < ::Rails::Railtie
   end
 
