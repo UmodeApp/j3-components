@@ -1,4 +1,4 @@
-module J3Components
+module ::J3Components
   module ActsAsRedirectableCreate
     extend ActiveSupport::Concern
     class_methods do
@@ -10,4 +10,4 @@ module J3Components
   end
 end
 
-ApplicationController.send(:include, J3Components::ActsAsRedirectableCreate)
+ActionController::Base.extend ::J3Components::ActsAsRedirectableCreate
