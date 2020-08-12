@@ -10,4 +10,4 @@ module J3Components
   end
 end
 
-ActionController::Base.send(:include, J3Components::ActsAsRedirectableCreate)
+ApplicationController.send(:include, J3Components::ActsAsRedirectableCreate)
