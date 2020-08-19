@@ -1,13 +1,25 @@
 /*
  *= require_self
  *= require j3_components
+ *= require mdb-pro
  */
 
+body {
+  background-color: #F0F0F0
+}
 .container {
   padding: 24px;
+  background-color: white;
 }
 p {
   color: blue;
   font-weight: bold;
 }
-
+.md-form {
+  min-height: 42px;
+}
+.md-form input {
+  height: auto;
+  padding: .6rem 0 .4rem 0;
+  margin: 0 0 .5rem 0;
+}

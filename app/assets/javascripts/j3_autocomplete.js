@@ -1,7 +1,8 @@
 const j3_autocomplete_autoInit = () => {
   // Auto init j3_autocomplete component
   $('.j3_autocomplete').each((_index, object) => {
-    $(object).j3_autocomplete()
+    if (!$(object).hasClass('md-form')) 
+      $(object).j3_autocomplete()
   })
 }
 $(document).ready(j3_autocomplete_autoInit)
@@ -40,6 +41,18 @@ class J3AutocompleteDropdown {
           // bind event on dropdown show
           dropdown.off('show.bs.dropdown').on('show.bs.dropdown', () => dropdown.foundation.bindShowEvent(dropdown))
         }
+
+        // tried to activate keyboard navigation
+        // dropdown.find('a[data-toggle="dropdown"]').on('click', (e) => false)
+        // dropdown.find('a[data-toggle="dropdown"]').on('focus', (e) => {
+        //   // e.preventDefault()
+        //   // e.stopPropagation()
+        //   dropdown.foundation.getResults(dropdown, false)
+        //   $(e.currentTarget).dropdown('toggle')
+        //   if (dropdown.foundation.val() == '')
+        //     dropdown.find('.dropdown-menu .dropdown-item').first().focus()
+          
+        // })
       } else {
         // add disabled class
         dropdown.addClass('d-none')
@@ -103,8 +116,14 @@ class J3AutocompleteDropdown {
           if (value != '') {
             autocompleteResults.find('.dropdown-item').each((index, itemEl) => {
               let item = $(itemEl)
-              if (item.data('id') == value)
-                dropdown.foundation.selected(dropdown, item, forceClear)
+              let selected = false
+              if (dropdown.foundation.isMultiple()) {
+                if (dropdown.find(`.j3_autocomplete__input[value=${item.data('id')}]`).length > 0) selected = true
+              } else
+                selected = (dropdown.foundation.val() == item.data('id'))
+              if (selected) dropdown.foundation.selected(dropdown, $(item), forceClear)
+              // if (item.data('id') == value)
+              //   dropdown.foundation.selected(dropdown, item, forceClear)
             })
           }
           // bind events
@@ -118,13 +137,16 @@ class J3AutocompleteDropdown {
         autocompleteResults.append(recordsDiv)
         
         dropdown.data('list').forEach((record) => {
+          // convert array to object
+          if (record instanceof Array) record = { id: record[0], name: record[1] }
+
           // create dropdown-item
-          let item = `<div class="dropdown-item" data-id="${record.id}">${record.name}</div>`
+          let item = `<a href="#" class="dropdown-item" data-id="${record.id}">${record.name}</div>`
           // set value
           let selected = false
-          if (dropdown.foundation.isMultiple())
+          if (dropdown.foundation.isMultiple()) {
             if (dropdown.find(`.j3_autocomplete__input[value=${record.id}]`).length > 0) selected = true
-          else
+          } else
             selected = (dropdown.foundation.val() == record.id) 
           if (selected) dropdown.foundation.selected(dropdown, $(item), forceClear)
           // append to records
@@ -165,7 +187,7 @@ class J3AutocompleteDropdown {
     this.val = () => dropdown.find('.j3_autocomplete__input').val()
 
     // Return true if has attribute multiple in dropdown
-    this.isMultiple = () => dropdown.attr('multiple')
+    this.isMultiple = () => dropdown.attr('multiple') != undefined && dropdown.attr('multiple') != ''
 
     // Search control chars allowed to send search
     this.ALLOWED_CONTROL_KEYS = ['Backspace', 'Delete']
@@ -198,6 +220,7 @@ class J3AutocompleteDropdown {
       selectedTag.on('click', (event) => {
         let recordId = $(event.currentTarget).data('id')
         dropdown.find(`.j3_autocomplete__input[value=${recordId}]`).remove()
+        dropdown.find(`.dropdown-menu .dropdown-item[data-id=${recordId}]`).removeClass('d-none')
         selectedTag.remove()
       })
     }
@@ -205,14 +228,17 @@ class J3AutocompleteDropdown {
     // Mark item as selected
     this.selected = (dropdown, item, forceClear = true) => {
       // float mdc label
-      dropdown.find('label').addClass('mdc-floating-label--float-above').addClass('active')
+      dropdown.find('label').addClass('mdc-floating-label--float-above')
+      // float mdb label
+      dropdown.parent().find('label').addClass('active')
       // add selected class to dropdown to extend css capabilities
       dropdown.addClass('selected')
       let selectedTag
       if (dropdown.foundation.isMultiple()) {
-        selectedTag = $(`<div class="badge" data-id="${item.data('id')}"><span class="item">${item.html()}</span> <span class="close">x</span></div>`)
+        selectedTag = $(`<div class="badge badge-default mr-2" data-id="${item.data('id')}"><span class="item">${item.html()}</span> <span class="badge-close">x</span></div>`)
         dropdown.foundation.bindMultipleSelectedItemEvent(dropdown, selectedTag)
         dropdown.find('.j3_autocomplete__label').append(selectedTag)
+        item.addClass('d-none')
       } else {
         // set html to input
         selectedTag = dropdown.find('.j3_autocomplete__label').html(item.html())
@@ -229,10 +255,10 @@ class J3AutocompleteDropdown {
 
       // set id to hidden
       if (!target.data('id')) throw new Error('Required data-id attribute in .dropdown-item')
-      let input = dropdown.find('input[type="hidden"]')
-      if (dropdown.foundation.isMultiple() && $(input).val()) {
-        input = $(input).clone().insertAfter($(input))
-        input.attr('name', `${input.attr('name')}[]`)
+      let input = dropdown.find('input[type="hidden"]').first()
+      if (dropdown.foundation.isMultiple() && input != undefined && $(input).val()) {
+        let newInput = input.clone()
+        newInput.insertAfter(input)
       } 
       input.val(target.data('id'))
 

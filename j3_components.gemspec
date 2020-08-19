@@ -15,6 +15,7 @@ Gem::Specification.new do |spec|
   spec.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
 
   spec.add_dependency 'rails', '~> 5.2.3'
+  spec.add_dependency 'simple_form'
 
   spec.add_development_dependency 'blade'
   spec.add_development_dependency 'bootstrap', '~> 4.4.1'
@@ -22,11 +23,13 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'capybara', '>= 2.15'
   spec.add_development_dependency 'chrome_remote'
   spec.add_development_dependency 'chromedriver-helper'
+  spec.add_development_dependency 'client_side_validations'
+  spec.add_development_dependency 'client_side_validations-simple_form'
   spec.add_development_dependency 'jasmine'
   spec.add_development_dependency 'jquery-rails'
+  spec.add_development_dependency 'mini_racer'
   spec.add_development_dependency 'puma'
   spec.add_development_dependency 'selenium-webdriver'
   spec.add_development_dependency 'sprockets'
   spec.add_development_dependency 'sqlite3'
-  spec.add_development_dependency 'mini_racer'
 end

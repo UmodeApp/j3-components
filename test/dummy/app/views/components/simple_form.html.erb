@@ -1,0 +1,13 @@
+<h1>Test Form</h1>
+<%= simple_form_for :form, url: '/components' do |f| %>
+  <%= f.input :name %>
+  <%= f.input :option_with_data_list, as: :j3_autocomplete, value: nil, input_html: { 'data-list': @episodes.to_json } %>
+  <%= f.input :option_with_url, as: :j3_autocomplete, value: nil, input_html: { 'data-url': episodes_components_path } %>
+  <%= f.input :option_with_data_list, as: :j3_autocomplete, input_html: { 'data-list': @episodes.to_json, value: 3 } %>
+  <%= f.input :option_with_url_and_value, as: :j3_autocomplete, input_html: { 'data-url': episodes_components_path, value: 2 } %>
+  <%= f.input :options_with_url, as: :j3_autocomplete, input_html: { 'data-url': episodes_components_path, multiple: true } %>
+  <%= f.input :options_with_url_and_csv_value, as: :j3_autocomplete, input_html: { 'data-url': episodes_components_path, multiple: true, value: '2,6' } %>
+  <%= f.input :options_with_datalist, as: :j3_autocomplete, input_html: { 'data-list': @episodes.to_json, multiple: true } %>
+  <%= f.input :options_with_datalist_and_csv_value, as: :j3_autocomplete, input_html: { 'data-list': @episodes.to_json, multiple: true, value: '2,3' } %>
+  <%= f.submit %>
+<% end %>

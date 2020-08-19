@@ -3,6 +3,9 @@ class ComponentsController < ApplicationController
   before_action :set_episodes, :set_heroes
   before_action :set_form
 
+  def simple_form
+  end
+
   def create
     render html: "#{params.to_json.gsub(",", ",<br>&nbsp;&nbsp;")}".html_safe
   end
@@ -44,6 +47,10 @@ class ComponentsController < ApplicationController
   end
 
   def set_form
-    @form_object = { episode_ajax_and_search: 2 }
+    @form_object = Form.new
+  end
+
+  class Form
+    include ActiveModel::Model
   end
 end

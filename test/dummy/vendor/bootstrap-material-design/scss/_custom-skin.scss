@@ -1,0 +1,28 @@
+// Your custom skin
+// Skins
+$skins: () !default;
+$skins: map-merge(
+  (
+    "umode": (
+      "skin-primary-color":      $primary-color,
+      "skin-navbar":             #000000,
+      "skin-footer-color":       #000000,
+      "skin-flat":               #F4F4F4,
+      "skin-accent":             #C4895D,
+      // "skin-sidenav-item":       #fff,
+      // "skin-sidenav-item-hover": #fff,
+      // "skin-gradient-start":     #fff,
+      // "skin-gradient-end":       #fff,
+      // "skin-mask-slight":        #fff,
+      // "skin-mask-light":         #fff,
+      // "skin-mask-strong":        #fff,
+      // "skin-sn-child":           #fff,
+      "skin-btn-primary":        $primary-color,
+      "skin-btn-secondary":      #F62258,
+      "skin-btn-default":        #F4F4F4,
+      "skin-text":               #212121
+    )
+  ),
+  $skins
+);
+
