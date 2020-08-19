@@ -26,7 +26,6 @@ class J3AutocompleteInput < SimpleForm::Inputs::Base
   #
   #   j3_autocomplete(:episode, input_class: 'mdc-text-field')
   def j3_autocomplete(field, options = {})
-    pp options
     input_and_menu = j3_autocomplete__input(field, options) + j3_autocomplete__menu
 
     tag.div({ class: 'dropdown j3_autocomplete' }.merge(j3_autocomplete__append_params_to_url(options))) do
