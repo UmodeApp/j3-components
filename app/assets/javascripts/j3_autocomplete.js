@@ -97,6 +97,9 @@ class J3AutocompleteDropdown {
       // Get results container
       let autocompleteResults = dropdown.find('.dropdown-menu .autocomplete-results')
 
+      // value
+      let value = dropdown.foundation.val()
+
       // Load from url
       if (dropdown.data('url')) {
         // Puts progress
@@ -110,24 +113,11 @@ class J3AutocompleteDropdown {
 
           // render results
           autocompleteResults.html(response)
-          // value
-          let value = dropdown.foundation.val()
-          // render selected
-          if (value != '') {
-            autocompleteResults.find('.dropdown-item').each((index, itemEl) => {
-              let item = $(itemEl)
-              let selected = false
-              if (dropdown.foundation.isMultiple()) {
-                if (dropdown.find(`.j3_autocomplete__input[value=${item.data('id')}]`).length > 0) selected = true
-              } else
-                selected = (dropdown.foundation.val() == item.data('id'))
-              if (selected) dropdown.foundation.selected(dropdown, $(item), forceClear)
-              // if (item.data('id') == value)
-              //   dropdown.foundation.selected(dropdown, item, forceClear)
-            })
-          }
           // bind events
           this.bindDropdownMenuEvents(dropdown, autocompleteResults)
+
+          // set value
+          this.selectOptionsForValue(dropdown, forceClear)
         })
       }
 
@@ -142,20 +132,31 @@ class J3AutocompleteDropdown {
 
           // create dropdown-item
           let item = `<a href="#" class="dropdown-item" data-id="${record.id}">${record.name}</div>`
-          // set value
-          let selected = false
-          if (dropdown.foundation.isMultiple()) {
-            if (dropdown.find(`.j3_autocomplete__input[value=${record.id}]`).length > 0) selected = true
-          } else
-            selected = (dropdown.foundation.val() == record.id) 
-          if (selected) dropdown.foundation.selected(dropdown, $(item), forceClear)
+
           // append to records
           recordsDiv.append(item)
           // bind events
           this.bindDropdownMenuEvents(dropdown, autocompleteResults)
         })
+        // set value
+        this.selectOptionsForValue(dropdown, forceClear)
       }
       return true
+    }
+
+    this.selectOptionsForValue = (dropdown, forceClear) => {
+      // render selected
+      if (dropdown.foundation.val() != '') {
+        dropdown.find('.dropdown-menu .autocomplete-results').find('.dropdown-item').each((index, itemEl) => {
+          let item = $(itemEl)
+          let selected = false
+          if (dropdown.foundation.isMultiple()) {
+            if (dropdown.find(`.j3_autocomplete__input[value=${item.data('id')}]`).length > 0) selected = true
+          } else
+            selected = (dropdown.foundation.val() == item.data('id'))
+          if (selected) dropdown.foundation.selected(dropdown, $(item), forceClear)
+        })
+      }
     }
 
     this.bindDropdownMenuEvents = (dropdown, autocompleteResults) => {
