@@ -51,6 +51,12 @@ class ComponentsController < ApplicationController
   end
 
   class Form
+    attr_accessor :name, :option_with_object_value, :options_with_object_value
     include ActiveModel::Model
+
+    def initialize
+      @option_with_object_value = 9
+      @options_with_object_value = '9,8'
+    end
   end
 end
