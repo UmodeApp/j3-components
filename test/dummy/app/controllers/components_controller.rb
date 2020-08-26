@@ -3,15 +3,12 @@ class ComponentsController < ApplicationController
   before_action :set_episodes, :set_heroes
   before_action :set_form
 
-<<<<<<< Updated upstream
-=======
   def simple_form
   end
 
   def multiple
   end
 
->>>>>>> Stashed changes
   def create
     render html: "#{params.to_json.gsub(",", ",<br>&nbsp;&nbsp;")}".html_safe
   end

@@ -5,6 +5,6 @@ module J3Components
   class ActionView::Helpers::FormBuilder
     include ActionView::Helpers::TagHelper
     attr_accessor :output_buffer
-    include J3Components::Autocomplete
+    include ::J3Components::Autocomplete
   end
 end

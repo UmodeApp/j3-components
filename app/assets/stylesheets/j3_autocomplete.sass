@@ -1,27 +1,101 @@
-.j3_autocomplete
-  .j3_autocomplete__label
-    display: flex
-    align-items: center
-  .j3_autocomplete__search
-    border: 0
-    width: 100%
-    padding: 0.25rem 1.25rem
-    outline: none
+
+.md-form.j3_autocomplete
+  min-height: calc(var(--j3-autocomplete-min-height, 42px) + 0.5rem)
+  .j3_autocomplete.show
+    a[data-toggle="dropdown"] .j3_autocomplete__label
+      border-bottom: var(--j3-autocomplete-border-active, 2px solid var(--primary))
   a[data-toggle="dropdown"]
-    text-decoration: none
-    color: black
-    &:hover
-      color: black
-  .dropdown-menu
-    z-index: 99999
-    width: 100%
-    margin-top: -1px
-    border-radius: 0
-    border: 0
-    border-top: 2px solid var(--mdc-theme-primary)
-    box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12)
-    .records
-      max-height: 40vh
-      overflow-y: auto
-      .dropdown-item
-        cursor: pointer
+    margin: var(--j3-autocomplete-margin, 0 0 .5rem 0)
+    padding: var(--j3-autocomplete-padding, .6rem 0 .4rem 0)
+    position: absolute
+    min-width: var(--j3-autocomplete-min-width, 100%)
+    min-height: var(--j3-autocomplete-min-height, 42px)
+    &:focus
+      outline: none
+    .j3_autocomplete__label
+      border-bottom: var(--j3-autocomplete-border, 1px solid #ced4da)
+      min-width: var(--j3-autocomplete-min-width, 100%)
+      min-height: calc(var(--j3-autocomplete-min-height, 42px) - 9px)
+      position: absolute
+      color: var(--j3-autocomplete-color, black)
+  // .form-control
+  //   &.j3_autocomplete
+  //     border-bottom: 1px solid
+  //     .dropdown-menu.show
+  //       margin-top: -20px
+  //       border-radius: 0
+  //       width: auto !important
+  //       .j3_autocomplete__search
+  //         margin: 0 1rem
+  //         width: 300px !important
+  //         border-bottom: 0 !important
+  //         &::focus
+  //           border-bottom: 0 !important
+  //           box-shadow: none !important
+
+// v1 legacy
+// .form
+//   .j3_autocomplete.form-control
+//     background-color: transparent
+//     padding: 0
+//     margin-bottom: 1rem
+
+// .j3_tags_input
+//   .j3_tags_container
+//     .j3_tags_input__chips
+//       padding-right: 1rem
+//       height: 55px
+//       .badge
+//         &:first-of-type
+//           margin-left: 0.25rem !important
+//         .tag
+//           color: #212121
+//   .dropdown-menu
+//     .records
+//       .badge
+//         color: #212121 !important
+//         margin-right: 0.5rem
+//         margin-bottom: 0.5rem
+//         &:hover
+//           color: #212121 !important
+  
+// .j3_autocomplete
+//   .j3_autocomplete__label
+//     display: flex
+//     align-items: center
+//     .badge
+//       background-color: white
+//       margin-left: 0.25rem
+//       display: flex
+//       cursor: pointer
+//       &.badge-danger
+//         color: #fff
+//         background-color: var(--mdc-theme-error)
+//         .close
+//           color: #fff
+//       .close
+//         font-size: 0.8rem
+//         margin-left: 0.25rem
+//   .j3_autocomplete__search
+//     border: 0
+//     width: 100%
+//     padding: 0.25rem 1.25rem
+//     outline: none
+//   a[data-toggle="dropdown"]
+//     text-decoration: none
+//     color: black
+//     &:hover
+//       color: black
+//   .dropdown-menu
+//     z-index: 99999
+//     width: 100%
+//     margin-top: -1px
+//     border-radius: 0
+//     border: 0
+//     border-top: 2px solid var(--mdc-theme-primary)
+//     box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12)
+//     .records
+//       max-height: 40vh
+//       overflow-y: auto
+//       .dropdown-item
+//         cursor: pointer

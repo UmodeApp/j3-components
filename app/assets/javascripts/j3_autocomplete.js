@@ -1,7 +1,8 @@
 const j3_autocomplete_autoInit = () => {
   // Auto init j3_autocomplete component
   $('.j3_autocomplete').each((_index, object) => {
-    $(object).j3_autocomplete()
+    if (!$(object).hasClass('md-form')) 
+      $(object).j3_autocomplete()
   })
 }
 $(document).ready(j3_autocomplete_autoInit)
@@ -40,6 +41,18 @@ class J3AutocompleteDropdown {
           // bind event on dropdown show
           dropdown.off('show.bs.dropdown').on('show.bs.dropdown', () => dropdown.foundation.bindShowEvent(dropdown))
         }
+
+        // tried to activate keyboard navigation
+        // dropdown.find('a[data-toggle="dropdown"]').on('click', (e) => false)
+        // dropdown.find('a[data-toggle="dropdown"]').on('focus', (e) => {
+        //   // e.preventDefault()
+        //   // e.stopPropagation()
+        //   dropdown.foundation.getResults(dropdown, false)
+        //   $(e.currentTarget).dropdown('toggle')
+        //   if (dropdown.foundation.val() == '')
+        //     dropdown.find('.dropdown-menu .dropdown-item').first().focus()
+          
+        // })
       } else {
         // add disabled class
         dropdown.addClass('d-none')
@@ -78,20 +91,21 @@ class J3AutocompleteDropdown {
 
     // Call URL and fill autocompleteResults container
     this.getResults = (dropdown, forceClear = true) => {
+      console.log(`[j3_autocomplete] getResults for ${dropdown.find('.j3_autocomplete__input').prop('id')}`, forceClear)
+      // Clear
+      if (forceClear) dropdown.foundation.clear(dropdown)
+      // Get results container
+      let autocompleteResults = dropdown.find('.dropdown-menu .autocomplete-results')
+
+      // value
+      let value = dropdown.foundation.val()
+
+      // Load from url
       if (dropdown.data('url')) {
-        console.log(`[j3_autocomplete] getResults for ${dropdown.find('.j3_autocomplete__input').prop('id')}`, forceClear)
-    
         // Puts progress
-        let autocompleteResults = dropdown.find('.dropdown-menu .autocomplete-results')
         autocompleteResults.j3_progress()
-
-        // Clear
-        if (forceClear) dropdown.foundation.clear(dropdown)
-
-        // Get URL and value
+        // Get URL
         let url = dropdown.foundation.url(dropdown)
-        let value = dropdown.foundation.val()
-
         // Call URL
         $.get(url, (response) => {
           // unbind search to prevent double requests
@@ -99,31 +113,67 @@ class J3AutocompleteDropdown {
 
           // render results
           autocompleteResults.html(response)
+          // bind events
+          this.bindDropdownMenuEvents(dropdown, autocompleteResults)
 
-          // bind item click event
-          autocompleteResults.find('.records .dropdown-item').off('click').on('click', (event) => {
-            dropdown.foundation.bindDropDownItemEvent(dropdown, event)
-          })
-          dropdown.find('.j3_autocomplete__search').on('keyup', (event) => {
-            dropdown.foundation.bindSearchEvent(dropdown, event)
-          })
-
-          // render selected
-          if (value != '') {
-            autocompleteResults.find('.dropdown-item').each((index, itemEl) => {
-              let item = $(itemEl)
-              if (item.data('id') == value)
-                dropdown.foundation.selected(dropdown, item, forceClear)
-            })
-          }
-          // bind save and redirect events
-          dropdown.foundation.bindSaveAndRedirectEvents(dropdown)
-          // Prevents show to load again
-          dropdown.off('show.bs.dropdown')
-          // trigger event
-          dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:getResults', [dropdown])
+          // set value
+          this.selectOptionsForValue(dropdown, forceClear)
         })
       }
+
+      // Load from datalist
+      else if (dropdown.data('list')) {
+        let recordsDiv = $('<div class="records"></div>')
+        autocompleteResults.append(recordsDiv)
+        
+        dropdown.data('list').forEach((record) => {
+          // convert array to object
+          if (record instanceof Array) record = { id: record[0], name: record[1] }
+
+          // create dropdown-item
+          let item = `<a href="#" class="dropdown-item" data-id="${record.id}">${record.name}</div>`
+
+          // append to records
+          recordsDiv.append(item)
+          // bind events
+          this.bindDropdownMenuEvents(dropdown, autocompleteResults)
+        })
+        // set value
+        this.selectOptionsForValue(dropdown, forceClear)
+      }
+      return true
+    }
+
+    this.selectOptionsForValue = (dropdown, forceClear) => {
+      // render selected
+      if (dropdown.foundation.val() != '') {
+        dropdown.find('.dropdown-menu .autocomplete-results').find('.dropdown-item').each((index, itemEl) => {
+          let item = $(itemEl)
+          let selected = false
+          if (dropdown.foundation.isMultiple()) {
+            if (dropdown.find(`.j3_autocomplete__input[value=${item.data('id')}]`).length > 0) selected = true
+          } else
+            selected = (dropdown.foundation.val() == item.data('id'))
+          if (selected) dropdown.foundation.selected(dropdown, $(item), forceClear)
+        })
+      }
+    }
+
+    this.bindDropdownMenuEvents = (dropdown, autocompleteResults) => {
+      // bind item click event
+      autocompleteResults.find('.records .dropdown-item').off('click').on('click', (event) => {
+        dropdown.foundation.bindDropDownItemEvent(dropdown, event)
+      })
+      // bind search event
+      dropdown.find('.j3_autocomplete__search').on('keyup', (event) => {
+        dropdown.foundation.bindSearchEvent(dropdown, event)
+      })
+      // bind save and redirect events
+      dropdown.foundation.bindSaveAndRedirectEvents(dropdown)
+      // Prevents show to load again
+      dropdown.off('show.bs.dropdown')
+      // trigger event
+      dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:getResults', [dropdown])
     }
 
     // Submit form when dropdown menu has a button and set j3_autocomplete__redirect hidden input
@@ -135,9 +185,10 @@ class J3AutocompleteDropdown {
     }
 
     // Value of autocomplete component
-    this.val = () => {
-      return dropdown.find('.j3_autocomplete__input').val()
-    }
+    this.val = () => dropdown.find('.j3_autocomplete__input').val()
+
+    // Return true if has attribute multiple in dropdown
+    this.isMultiple = () => dropdown.attr('multiple') != undefined && dropdown.attr('multiple') != ''
 
     // Search control chars allowed to send search
     this.ALLOWED_CONTROL_KEYS = ['Backspace', 'Delete']
@@ -165,17 +216,38 @@ class J3AutocompleteDropdown {
       }
     }
 
+    // Bind event to remove item from multiple select
+    this.bindMultipleSelectedItemEvent = (dropdown, selectedTag) => {
+      selectedTag.on('click', (event) => {
+        let recordId = $(event.currentTarget).data('id')
+        dropdown.find(`.j3_autocomplete__input[value=${recordId}]`).remove()
+        dropdown.find(`.dropdown-menu .dropdown-item[data-id=${recordId}]`).removeClass('d-none')
+        selectedTag.remove()
+      })
+    }
+
+    // Mark item as selected
     this.selected = (dropdown, item, forceClear = true) => {
-      // set html to input
-      dropdown.find('.j3_autocomplete__label').html(item.html())
       // float mdc label
-      dropdown.find('.mdc-floating-label').addClass('mdc-floating-label--float-above')
+      dropdown.find('label').addClass('mdc-floating-label--float-above')
+      // float mdb label
+      dropdown.parent().find('label').addClass('active')
       // add selected class to dropdown to extend css capabilities
       dropdown.addClass('selected')
+      let selectedTag
+      if (dropdown.foundation.isMultiple()) {
+        selectedTag = $(`<div class="badge badge-default mr-2" data-id="${item.data('id')}"><span class="item">${item.html()}</span> <span class="badge-close">x</span></div>`)
+        dropdown.foundation.bindMultipleSelectedItemEvent(dropdown, selectedTag)
+        dropdown.find('.j3_autocomplete__label').append(selectedTag)
+        item.addClass('d-none')
+      } else {
+        // set html to input
+        selectedTag = dropdown.find('.j3_autocomplete__label').html(item.html())
+      }
       // check relatives
       dropdown.foundation.checkRelatives(dropdown, forceClear)
       // trigger change event
-      dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:change', [dropdown, item])
+      dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:change', [dropdown, item, selectedTag])
     }
 
     // Bind click event for dropdown items
@@ -184,7 +256,12 @@ class J3AutocompleteDropdown {
 
       // set id to hidden
       if (!target.data('id')) throw new Error('Required data-id attribute in .dropdown-item')
-      dropdown.find('input[type="hidden"]').val(target.data('id'))
+      let input = dropdown.find('input[type="hidden"]').first()
+      if (dropdown.foundation.isMultiple() && input != undefined && $(input).val()) {
+        let newInput = input.clone()
+        newInput.insertAfter(input)
+      } 
+      input.val(target.data('id'))
 
       // set html to input
       dropdown.foundation.selected(dropdown, target, true)
