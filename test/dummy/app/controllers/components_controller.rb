@@ -3,6 +3,15 @@ class ComponentsController < ApplicationController
   before_action :set_episodes, :set_heroes
   before_action :set_form
 
+<<<<<<< Updated upstream
+=======
+  def simple_form
+  end
+
+  def multiple
+  end
+
+>>>>>>> Stashed changes
   def create
     render html: "#{params.to_json.gsub(",", ",<br>&nbsp;&nbsp;")}".html_safe
   end
@@ -44,6 +53,17 @@ class ComponentsController < ApplicationController
   end
 
   def set_form
-    @form_object = { episode_ajax_and_search: 2 }
+    @form_object = Form.new
+  end
+
+  class Form
+    attr_accessor :name, :option_with_object_value, :options_with_object_value, :episode_multiple
+    include ActiveModel::Model
+
+    def initialize
+      @option_with_object_value = 9
+      @options_with_object_value = '9,8'
+      @episode_multiple = '9,8'
+    end
   end
 end
