@@ -223,6 +223,7 @@ class J3AutocompleteDropdown {
         dropdown.find(`.j3_autocomplete__input[value=${recordId}]`).remove()
         dropdown.find(`.dropdown-menu .dropdown-item[data-id=${recordId}]`).removeClass('d-none')
         selectedTag.remove()
+        selectedTag.find('[data-toggle=tooltip]').tooltip('dispose')
       })
     }
 
@@ -244,6 +245,8 @@ class J3AutocompleteDropdown {
         // set html to input
         selectedTag = dropdown.find('.j3_autocomplete__label').html(item.html())
       }
+      // activate tooltips
+      selectedTag.find('[data-toggle=tooltip]').tooltip()
       // check relatives
       dropdown.foundation.checkRelatives(dropdown, forceClear)
       // trigger change event
