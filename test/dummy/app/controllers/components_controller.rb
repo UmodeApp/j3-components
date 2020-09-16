@@ -6,6 +6,9 @@ class ComponentsController < ApplicationController
   def simple_form
   end
 
+  def multiple
+  end
+
   def create
     render html: "#{params.to_json.gsub(",", ",<br>&nbsp;&nbsp;")}".html_safe
   end
@@ -51,12 +54,13 @@ class ComponentsController < ApplicationController
   end
 
   class Form
-    attr_accessor :name, :option_with_object_value, :options_with_object_value
+    attr_accessor :name, :option_with_object_value, :options_with_object_value, :episode_multiple
     include ActiveModel::Model
 
     def initialize
       @option_with_object_value = 9
       @options_with_object_value = '9,8'
+      @episode_multiple = '9,8'
     end
   end
 end
