@@ -222,8 +222,8 @@ class J3AutocompleteDropdown {
         let recordId = $(event.currentTarget).data('id')
         dropdown.find(`.j3_autocomplete__input[value=${recordId}]`).remove()
         dropdown.find(`.dropdown-menu .dropdown-item[data-id=${recordId}]`).removeClass('d-none')
-        selectedTag.remove()
         selectedTag.find('[data-toggle=tooltip]').tooltip('dispose')
+        selectedTag.remove()
       })
     }
 
