@@ -167,7 +167,7 @@ class J3AutocompleteDropdown {
       // bind search event
       dropdown.find('.j3_autocomplete__search').on('keyup', (event) => {
         dropdown.foundation.bindSearchEvent(dropdown, event)
-      })
+      }).on('keydown', (event) => { if (event.keyCode == 13) return false })
       // bind save and redirect events
       dropdown.foundation.bindSaveAndRedirectEvents(dropdown)
       // Prevents show to load again
