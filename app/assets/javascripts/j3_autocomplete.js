@@ -109,7 +109,7 @@ class J3AutocompleteDropdown {
         // Call URL
         $.get(url, (response) => {
           // unbind search to prevent double requests
-          dropdown.find('.j3_autocomplete__search').off('keyup') 
+          dropdown.find('.j3_autocomplete__search').off('keyup').off('keydown')
 
           // render results
           autocompleteResults.html(response)
@@ -167,7 +167,17 @@ class J3AutocompleteDropdown {
       // bind search event
       dropdown.find('.j3_autocomplete__search').on('keyup', (event) => {
         dropdown.foundation.bindSearchEvent(dropdown, event)
-      }).on('keydown', (event) => { if (event.keyCode == 13) return false })
+      }).on('keydown', (event) => { 
+        if (event.keyCode == 13) return false 
+
+        // control+v or cmd+v
+        this.ctrlDown = event.ctrlKey || event.metaKey
+        if (this.ctrlDown && event.keyCode == 86) {
+          this.ctrlV = true
+        }
+        console.log(`ctrl=${this.ctrlDown} | ctrlV=${this.ctrlV} | ${event.keyCode}`)
+        return true
+      })
       // bind save and redirect events
       dropdown.foundation.bindSaveAndRedirectEvents(dropdown)
       // Prevents show to load again
@@ -202,17 +212,20 @@ class J3AutocompleteDropdown {
     // Bind search query key up events
     this.bindSearchEvent = (dropdown, event) => {
       let key = event.originalEvent.code
+      // Dont search in control+key except ctrl+v
+      if (this.ctrlDown && !this.ctrlV) return false
       // Check if char is allowed
-      if (dropdown.foundation.ALLOWED_CONTROL_KEYS.includes(key) || key.startsWith('Key') || key.startsWith('Digit')) {
+      if (dropdown.foundation.ALLOWED_CONTROL_KEYS.includes(key) || key.startsWith('Key') || key.startsWith('Digit') || this.ctrlV) {
         // prevent sequential submits using timer
         clearTimeout(dropdown.foundation.timer)
+        this.ctrlV = false
 
         // create timer 
         dropdown.foundation.timer = setTimeout(function() {
           // Reload items
           console.log(`[j3_autocomplete] search for ${dropdown.find('.j3_autocomplete__search').val()}`)
           dropdown.foundation.bindShowEvent(dropdown)
-        }, dropdown.foundation.TIMEOUT)
+        }, (this.ctrlV) ? 0 : dropdown.foundation.TIMEOUT)
       }
     }
 
