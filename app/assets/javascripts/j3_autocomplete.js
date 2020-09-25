@@ -175,7 +175,7 @@ class J3AutocompleteDropdown {
         if (this.ctrlDown && event.keyCode == 86) {
           this.ctrlV = true
         }
-        console.log(`ctrl=${this.ctrlDown} | ctrlV=${this.ctrlV} | ${event.keyCode}`)
+        // console.log(`ctrl=${this.ctrlDown} | ctrlV=${this.ctrlV} | ${event.keyCode}`)
         return true
       })
       // bind save and redirect events
