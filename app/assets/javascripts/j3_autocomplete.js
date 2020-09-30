@@ -224,7 +224,7 @@ class J3AutocompleteDropdown {
         dropdown.foundation.timer = setTimeout(function() {
           // Reload items
           console.log(`[j3_autocomplete] search for ${dropdown.find('.j3_autocomplete__search').val()}`)
-          dropdown.foundation.bindShowEvent(dropdown)
+          dropdown.foundation.bindShowEvent(dropdown, !dropdown.foundation.isMultiple())
         }, (this.ctrlV) ? 0 : dropdown.foundation.TIMEOUT)
       }
     }
@@ -252,7 +252,9 @@ class J3AutocompleteDropdown {
       if (dropdown.foundation.isMultiple()) {
         selectedTag = $(`<div class="badge badge-default mr-2" data-id="${item.data('id')}"><span class="item">${item.html()}</span> <span class="badge-close">x</span></div>`)
         dropdown.foundation.bindMultipleSelectedItemEvent(dropdown, selectedTag)
-        dropdown.find('.j3_autocomplete__label').append(selectedTag)
+        let label = dropdown.find('.j3_autocomplete__label')
+        if (label.find(`.badge[data-id=${item.data('id')}]`).length == 0)
+          label.append(selectedTag)
         item.addClass('d-none')
       } else {
         // set html to input
@@ -276,6 +278,8 @@ class J3AutocompleteDropdown {
       if (dropdown.foundation.isMultiple() && input != undefined && $(input).val()) {
         let newInput = input.clone()
         newInput.insertAfter(input)
+        // don't close dropdown
+        event.stopPropagation()
       } 
       input.val(target.data('id'))
 
