@@ -1,5 +1,10 @@
-<%= form_with model: @form_object, url: '' do |f| %>
+<%= form_with model: @form_object, url: components_path do |f| %>
 
   <%= f.j3_mdc_autocomplete :episode_multiple, multiple: true, 'data-url': episodes_components_path %>
+
+  <div class="mt-4">
+    <hr/>
+    <%= f.submit class: 'mdc-button mdc-button--raised btn-success' %>
+  </div>
 
 <% end %>

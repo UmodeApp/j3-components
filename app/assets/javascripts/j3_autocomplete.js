@@ -233,7 +233,12 @@ class J3AutocompleteDropdown {
     this.bindMultipleSelectedItemEvent = (dropdown, selectedTag) => {
       selectedTag.on('click', (event) => {
         let recordId = $(event.currentTarget).data('id')
-        dropdown.find(`.j3_autocomplete__input[value=${recordId}]`).remove()
+        // last input, dont delete, only clear and disable
+        if (dropdown.find(`.j3_autocomplete__input`).length == 1) {
+          dropdown.find(`.j3_autocomplete__input`).first().val('')
+          dropdown.find(`.j3_autocomplete__input`).first().prop('disabled', true)
+        } else
+          dropdown.find(`.j3_autocomplete__input[value=${recordId}]`).remove()
         dropdown.find(`.dropdown-menu .dropdown-item[data-id=${recordId}]`).removeClass('d-none')
         selectedTag.find('[data-toggle=tooltip]').tooltip('dispose')
         selectedTag.remove()
@@ -270,6 +275,8 @@ class J3AutocompleteDropdown {
 
     // Bind click event for dropdown items
     this.bindDropDownItemEvent = (dropdown, event) => {
+      // dont close dropdown in multiple
+      if (dropdown.foundation.isMultiple()) event.stopPropagation()
       let target = $(event.currentTarget)
 
       // set id to hidden
@@ -282,6 +289,7 @@ class J3AutocompleteDropdown {
         event.stopPropagation()
       } 
       input.val(target.data('id'))
+      input.prop('disabled', false)
 
       // set html to input
       dropdown.foundation.selected(dropdown, target, true)
