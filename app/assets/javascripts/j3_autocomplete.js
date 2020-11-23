@@ -195,7 +195,7 @@ class J3AutocompleteDropdown {
     }
 
     // Value of autocomplete component
-    this.val = () => dropdown.find('.j3_autocomplete__input').val()
+    this.val = () => dropdown.find('.j3_autocomplete__input').map(function() { return $(this).val() } ).get()
 
     // Return true if has attribute multiple in dropdown
     this.isMultiple = () => dropdown.attr('multiple') != undefined && dropdown.attr('multiple') != ''
