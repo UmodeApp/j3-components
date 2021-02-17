@@ -50,11 +50,11 @@ module J3Components
     def convert_redirected_param(old_params, new_params)
       return unless old_params[:redirected_type].present?
 
-      if new_params[controller_name.singularize].present?
-        attribute_name = old_params[:redirected_type].underscore + '_id'
+      attribute_name = old_params[:redirected_type].underscore + '_id'
+      if new_params[controller_name.singularize].present? && new_params[controller_name.singularize][attribute_name].present?
         new_params[controller_name.singularize][attribute_name] = old_params[:redirected_id]
       else
-        new_params = new_params.merge(old_params)
+        new_params.merge!(old_params)
       end
     end
   end
