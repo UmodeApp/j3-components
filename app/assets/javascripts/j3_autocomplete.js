@@ -144,7 +144,7 @@ class J3AutocompleteDropdown {
       return true
     }
 
-    this.selectOptionsForValue = (dropdown, forceClear) => {
+    this.selectOptionsForValue = (dropdown, forceClear, initializing) => {
       // render selected
       if (dropdown.foundation.val() != '') {
         dropdown.find('.dropdown-menu .autocomplete-results').find('.dropdown-item').each((index, itemEl) => {
