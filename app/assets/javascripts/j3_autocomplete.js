@@ -39,7 +39,7 @@ class J3AutocompleteDropdown {
           dropdown.foundation.bindShowEvent(dropdown, forceClear, true)
         } else {
           // bind event on dropdown show
-          dropdown.off('show.bs.dropdown').on('show.bs.dropdown', () => dropdown.foundation.bindShowEvent(dropdown, true, true)
+          dropdown.off('show.bs.dropdown').on('show.bs.dropdown', () => dropdown.foundation.bindShowEvent(dropdown, true, true))
         }
 
         // tried to activate keyboard navigation
