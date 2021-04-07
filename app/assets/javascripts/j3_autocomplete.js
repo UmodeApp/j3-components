@@ -195,7 +195,7 @@ class J3AutocompleteDropdown {
     }
 
     // Value of autocomplete component
-    this.val = () => dropdown.find('.j3_autocomplete__input').val()
+    this.val = () => dropdown.find('.j3_autocomplete__input').map(function() { return $(this).val() } ).get()
 
     // Return true if has attribute multiple in dropdown
     this.isMultiple = () => dropdown.attr('multiple') != undefined && dropdown.attr('multiple') != ''
@@ -239,6 +239,7 @@ class J3AutocompleteDropdown {
           dropdown.find(`.j3_autocomplete__input`).first().prop('disabled', true)
         } else
           dropdown.find(`.j3_autocomplete__input[value=${recordId}]`).remove()
+        dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:remove', [dropdown, selectedTag])
         dropdown.find(`.dropdown-menu .dropdown-item[data-id=${recordId}]`).removeClass('d-none')
         selectedTag.find('[data-toggle=tooltip]').tooltip('dispose')
         selectedTag.remove()
