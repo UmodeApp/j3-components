@@ -76,7 +76,7 @@ class J3AutocompleteInput < SimpleForm::Inputs::Base
 
   def object_value
     value = options[:value] unless options[:value].nil?
-    return nil if value.blank?
+    return nil if !options[:value].nil? && value.blank?
 
     value = @builder.object.send(attribute_name)&.to_s if @builder.object.present? && @builder.object.respond_to?(attribute_name)
     return nil if value.blank?
