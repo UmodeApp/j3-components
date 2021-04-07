@@ -11,9 +11,9 @@ class J3AutocompleteInput < SimpleForm::Inputs::Base
   #
   # === HTML Options
   #  * data-url: URL for dropdown items ajax request
-  #  * data-datalist: Use a datalist for dropdown items or initial options 
+  #  * data-datalist: Use a datalist for dropdown items or initial options
   #    when data-url is defined.
-  #  * input_container_class: Class for input container for input (dropdown) 
+  #  * input_container_class: Class for input container for input (dropdown)
   #    and label
   def input(wrapper_options)
     @options = merge_wrapper_options(input_html_options, wrapper_options)
@@ -24,9 +24,9 @@ class J3AutocompleteInput < SimpleForm::Inputs::Base
 
   private
 
-  # If autocomplete is in a form that was submited, you will need the parent 
-  # controller action to build the right return_path after create a new 
-  # record in autocomplete. The parent return_path is passed to parameter as 
+  # If autocomplete is in a form that was submited, you will need the parent
+  # controller action to build the right return_path after create a new
+  # record in autocomplete. The parent return_path is passed to parameter as
   # well
   def append_params_to_url
     url = parse_url
@@ -75,13 +75,19 @@ class J3AutocompleteInput < SimpleForm::Inputs::Base
   end
 
   def object_value
-    return options[:value] if options[:value].present?
+    value = options[:value] unless options[:value].nil?
+    return nil if value.blank?
 
-    @builder.object.send(attribute_name) if @builder.object.present? && @builder.object.respond_to?(attribute_name)
+    value = @builder.object.send(attribute_name)&.to_s if @builder.object.present? && @builder.object.respond_to?(attribute_name)
+    return nil if value.blank?
+
+    value
   end
 
   def multiple_values
     # convert csv
     return object_value.split(',') if object_value.is_a?(String)
+
+    object_value
   end
 end

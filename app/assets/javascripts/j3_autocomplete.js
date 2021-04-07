@@ -1,7 +1,7 @@
 const j3_autocomplete_autoInit = () => {
   // Auto init j3_autocomplete component
   $('.j3_autocomplete').each((_index, object) => {
-    if (!$(object).hasClass('md-form')) 
+    if (!$(object).hasClass('md-form'))
       $(object).j3_autocomplete()
   })
 }
@@ -36,10 +36,10 @@ class J3AutocompleteDropdown {
         dropdown.removeClass('d-none')
         if (dropdown.foundation.val() != '') {
           // if has value, load data and set value
-          dropdown.foundation.bindShowEvent(dropdown, forceClear)
+          dropdown.foundation.bindShowEvent(dropdown, forceClear, true)
         } else {
           // bind event on dropdown show
-          dropdown.off('show.bs.dropdown').on('show.bs.dropdown', () => dropdown.foundation.bindShowEvent(dropdown))
+          dropdown.off('show.bs.dropdown').on('show.bs.dropdown', () => dropdown.foundation.bindShowEvent(dropdown, true, true)
         }
 
         // tried to activate keyboard navigation
@@ -51,7 +51,7 @@ class J3AutocompleteDropdown {
         //   $(e.currentTarget).dropdown('toggle')
         //   if (dropdown.foundation.val() == '')
         //     dropdown.find('.dropdown-menu .dropdown-item').first().focus()
-          
+
         // })
       } else {
         // add disabled class
@@ -60,9 +60,9 @@ class J3AutocompleteDropdown {
     }
 
     // Init dropdown events and load results
-    this.bindShowEvent = (dropdown, clear = true) => {
+    this.bindShowEvent = (dropdown, clear = true, initializing = false) => {
       // Call URL
-      dropdown.foundation.getResults(dropdown, clear)
+      dropdown.foundation.getResults(dropdown, clear, initializing)
     }
 
     // Check URL param exists, add search query if not blank and relatives
@@ -90,7 +90,7 @@ class J3AutocompleteDropdown {
     }
 
     // Call URL and fill autocompleteResults container
-    this.getResults = (dropdown, forceClear = true) => {
+    this.getResults = (dropdown, forceClear = true, initializing = false) => {
       console.log(`[j3_autocomplete] getResults for ${dropdown.find('.j3_autocomplete__input').prop('id')}`, forceClear)
       // Clear
       if (forceClear) dropdown.foundation.clear(dropdown)
@@ -117,7 +117,7 @@ class J3AutocompleteDropdown {
           this.bindDropdownMenuEvents(dropdown, autocompleteResults)
 
           // set value
-          this.selectOptionsForValue(dropdown, forceClear)
+          this.selectOptionsForValue(dropdown, forceClear, initializing)
         })
       }
 
@@ -125,7 +125,7 @@ class J3AutocompleteDropdown {
       else if (dropdown.data('list')) {
         let recordsDiv = $('<div class="records"></div>')
         autocompleteResults.append(recordsDiv)
-        
+
         dropdown.data('list').forEach((record) => {
           // convert array to object
           if (record instanceof Array) record = { id: record[0], name: record[1] }
@@ -139,7 +139,7 @@ class J3AutocompleteDropdown {
           this.bindDropdownMenuEvents(dropdown, autocompleteResults)
         })
         // set value
-        this.selectOptionsForValue(dropdown, forceClear)
+        this.selectOptionsForValue(dropdown, forceClear, initializing)
       }
       return true
     }
@@ -154,7 +154,7 @@ class J3AutocompleteDropdown {
             if (dropdown.find(`.j3_autocomplete__input[value=${item.data('id')}]`).length > 0) selected = true
           } else
             selected = (dropdown.foundation.val() == item.data('id'))
-          if (selected) dropdown.foundation.selected(dropdown, $(item), forceClear)
+          if (selected) dropdown.foundation.selected(dropdown, $(item), forceClear, initializing)
         })
       }
     }
@@ -167,8 +167,8 @@ class J3AutocompleteDropdown {
       // bind search event
       dropdown.find('.j3_autocomplete__search').on('keyup', (event) => {
         dropdown.foundation.bindSearchEvent(dropdown, event)
-      }).on('keydown', (event) => { 
-        if (event.keyCode == 13) return false 
+      }).on('keydown', (event) => {
+        if (event.keyCode == 13) return false
 
         // control+v or cmd+v
         this.ctrlDown = event.ctrlKey || event.metaKey
@@ -220,7 +220,7 @@ class J3AutocompleteDropdown {
         clearTimeout(dropdown.foundation.timer)
         this.ctrlV = false
 
-        // create timer 
+        // create timer
         dropdown.foundation.timer = setTimeout(function() {
           // Reload items
           console.log(`[j3_autocomplete] search for ${dropdown.find('.j3_autocomplete__search').val()}`)
@@ -246,7 +246,7 @@ class J3AutocompleteDropdown {
     }
 
     // Mark item as selected
-    this.selected = (dropdown, item, forceClear = true) => {
+    this.selected = (dropdown, item, forceClear = true, initializing = false) => {
       // float mdc label
       dropdown.find('label').addClass('mdc-floating-label--float-above')
       // float mdb label
@@ -269,8 +269,9 @@ class J3AutocompleteDropdown {
       selectedTag.find('[data-toggle=tooltip]').tooltip()
       // check relatives
       dropdown.foundation.checkRelatives(dropdown, forceClear)
-      // trigger change event
-      dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:change', [dropdown, item, selectedTag])
+      // trigger change event only if not initializing
+      if (!initializing)
+        dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:change', [dropdown, item, selectedTag])
     }
 
     // Bind click event for dropdown items
@@ -287,7 +288,7 @@ class J3AutocompleteDropdown {
         newInput.insertAfter(input)
         // don't close dropdown
         event.stopPropagation()
-      } 
+      }
       input.val(target.data('id'))
       input.prop('disabled', false)
 
@@ -323,7 +324,7 @@ class J3AutocompleteDropdown {
       return true
     }
 
-    // Check if exists and get val of relative element 
+    // Check if exists and get val of relative element
     this.getRelativeVal = (dropdown) => {
       let selector = dropdown.data('relative')
       let element = $(selector)
