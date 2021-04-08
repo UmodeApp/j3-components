@@ -240,6 +240,7 @@ class J3AutocompleteDropdown {
         } else
           dropdown.find(`.j3_autocomplete__input[value=${recordId}]`).remove()
         dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:remove', [dropdown, selectedTag])
+        dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:change', [dropdown, selectedTag])
         dropdown.find(`.dropdown-menu .dropdown-item[data-id=${recordId}]`).removeClass('d-none')
         selectedTag.find('[data-toggle=tooltip]').tooltip('dispose')
         selectedTag.remove()
