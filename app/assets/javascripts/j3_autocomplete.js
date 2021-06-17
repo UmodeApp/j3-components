@@ -207,7 +207,7 @@ class J3AutocompleteDropdown {
     this.timer = null
 
     // Timeout to wait for more chars (in ms)
-    this.TIMEOUT = 500
+    this.TIMEOUT = 1000
 
     // Bind search query key up events
     this.bindSearchEvent = (dropdown, event) => {
