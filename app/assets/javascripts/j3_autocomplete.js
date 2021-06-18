@@ -57,6 +57,7 @@ class J3AutocompleteDropdown {
         // add disabled class
         dropdown.addClass('d-none')
       }
+      dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:init', [dropdown])
     }
 
     // Init dropdown events and load results
