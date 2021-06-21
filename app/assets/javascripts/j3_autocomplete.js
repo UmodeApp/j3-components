@@ -119,6 +119,9 @@ class J3AutocompleteDropdown {
 
           // set value
           this.selectOptionsForValue(dropdown, forceClear, initializing)
+
+          // trigger event
+          dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:getResults', [dropdown])
         })
       }
 
@@ -141,6 +144,9 @@ class J3AutocompleteDropdown {
         })
         // set value
         this.selectOptionsForValue(dropdown, forceClear, initializing)
+
+        // trigger event
+        dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:getResults', [dropdown])
       }
       return true
     }
@@ -183,8 +189,6 @@ class J3AutocompleteDropdown {
       dropdown.foundation.bindSaveAndRedirectEvents(dropdown)
       // Prevents show to load again
       dropdown.off('show.bs.dropdown')
-      // trigger event
-      dropdown.find('.j3_autocomplete__input').trigger('j3_autocomplete:getResults', [dropdown])
     }
 
     // Submit form when dropdown menu has a button and set j3_autocomplete__redirect hidden input
