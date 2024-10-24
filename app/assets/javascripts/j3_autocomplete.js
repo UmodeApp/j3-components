@@ -220,7 +220,7 @@ class J3AutocompleteDropdown {
       // Dont search in control+key except ctrl+v
       if (this.ctrlDown && !this.ctrlV) return false
       // Check if char is allowed
-      if (dropdown.foundation.ALLOWED_CONTROL_KEYS.includes(key) || key.startsWith('Key') || key.startsWith('Digit') || this.ctrlV) {
+      if (dropdown.foundation.ALLOWED_CONTROL_KEYS.includes(key) || key.startsWith('Key') || key.startsWith('Digit') || key.startsWith('Numpad') || this.ctrlV) {
         // prevent sequential submits using timer
         clearTimeout(dropdown.foundation.timer)
         this.ctrlV = false
