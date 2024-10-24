@@ -220,7 +220,7 @@ class J3AutocompleteDropdown {
       // Dont search in control+key except ctrl+v
       if (this.ctrlDown && !this.ctrlV) return false
       // Check if char is allowed
-      if (dropdown.foundation.ALLOWED_CONTROL_KEYS.includes(key) || key.startsWith('Key') || key.startsWith('Digit') || key.startsWith('Numpad') || this.ctrlV) {
+       //if (dropdown.foundation.ALLOWED_CONTROL_KEYS.includes(key) || key.startsWith('Key') || key.startsWith('Digit') || key.startsWith('Numpad') || this.ctrlV) {
         // prevent sequential submits using timer
         clearTimeout(dropdown.foundation.timer)
         this.ctrlV = false
@@ -231,7 +231,7 @@ class J3AutocompleteDropdown {
           console.log(`[j3_autocomplete] search for ${dropdown.find('.j3_autocomplete__search').val()}`)
           dropdown.foundation.bindShowEvent(dropdown, !dropdown.foundation.isMultiple())
         }, (this.ctrlV) ? 0 : dropdown.foundation.TIMEOUT)
-      }
+      // }
     }
 
     // Bind event to remove item from multiple select
