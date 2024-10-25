@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    j3_components (0.1.0)
-      rails (~> 5.2.3)
+    j3_components (0.2.2)
+      rails (>= 5)
       simple_form
 
 GEM
@@ -205,6 +205,8 @@ GEM
     rubyzip (2.3.0)
     sassc (2.4.0)
       ffi (~> 1.9)
+    sassc (2.4.0-x64-mingw32)
+      ffi (~> 1.9)
     sassc-rails (2.1.2)
       railties (>= 4.0.0)
       sassc (>= 2.0)
@@ -243,6 +245,7 @@ GEM
 
 PLATFORMS
   ruby
+  x64-mingw32
 
 DEPENDENCIES
   blade
@@ -263,4 +266,4 @@ DEPENDENCIES
   sqlite3
 
 BUNDLED WITH
-   2.1.4
+   2.5.6
