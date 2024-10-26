@@ -72,7 +72,7 @@ class J3AutocompleteDropdown {
       let url = dropdown.data('url')
 
       // Check searchQuery
-      let searchQuery = dropdown.find('.j3_autocomplete__search').val() || ''
+      let searchQuery = encodeURIComponent(dropdown.find('.j3_autocomplete__search').val()) || ''
       if (searchQuery.length > 0) url = `${url}${dropdown.foundation.urlSeparator(url)}keyword=${searchQuery}`
 
       // Check value

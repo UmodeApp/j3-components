@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    j3_components (0.2.2)
+    j3_components (0.2.3)
       rails (>= 5)
       simple_form
 
